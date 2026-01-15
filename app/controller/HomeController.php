@@ -2,7 +2,7 @@
 
 class HomeController {
     public function index(){
-        echo "Hello";
+        echo "Hello <br>";
     }
 }
 ?>
