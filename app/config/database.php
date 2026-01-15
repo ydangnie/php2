@@ -3,6 +3,6 @@
         'host' => 'localhost',
         'database' => 'php2',
         'username' => 'root',
-        'password' => ''
+        'password' => 'upredator'
     ]
 ?>

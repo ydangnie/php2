@@ -1,43 +1,55 @@
 <?php
-class ProductModel extends Model
-{
-    private $table = "products";
-    public function all()
-    {
+class ProductController extends Controller {
+    private $productModel;
 
-        $sql = "select * from 
-        $this->table";
-        $conn = $this->connect();
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([]);
-        return $stmt->fetchAll
-        (PDO::FETCH_ASSOC);
+    public function __construct() {
+        // Load model
+        $this->productModel = $this->model('ProductModel');
     }
-    public function find($id) {
-        $sql = "select * from 
-        $this->table where = :id";
-        
-        $conn = $this->connect();
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([
-            "id" => $id
-        ]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-    public function create($data = {}) {
 
-        $sql = "insert into $this->table ('tensanpham', 'gia', 'mota' VALUES (':tensanpham', ':gia', ':mota')";
-        $conn = $this->connect();
-        $stmt = $conn->prepare($sql);
-         $stmt->execute([
-            "id" => $id
-        ]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // 1. READ: Hiển thị danh sách
+    public function index() {
+        $products = $this->productModel->all();
+        // Gọi view và truyền dữ liệu
+        $this->view('product/index', ['products' => $products]);
     }
-    public function update() {
 
+    // 2. CREATE: Hiển thị form thêm
+    public function add() {
+        $this->view('product/add', []);
     }
-    public function delete() {
 
+    // 2. CREATE: Xử lý lưu dữ liệu
+    public function store() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $name = $_POST['name'];
+            $price = $_POST['price'];
+            
+            $this->productModel->create(['name' => $name, 'price' => $price]);
+            $this->redirect('product/index'); // Quay về danh sách
+        }
+    }
+
+    // 3. UPDATE: Hiển thị form sửa
+    public function edit($id) {
+        $product = $this->productModel->find($id);
+        $this->view('product/edit', ['product' => $product]);
+    }
+
+    // 3. UPDATE: Xử lý cập nhật
+    public function update_product($id) {
+         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $name = $_POST['name'];
+            $price = $_POST['price'];
+
+            $this->productModel->update(['name' => $name, 'price' => $price], $id);
+            $this->redirect('product/index');
+         }
+    }
+
+    // 4. DELETE: Xóa
+    public function delete($id) {
+        $this->productModel->delete($id);
+        $this->redirect('product/index');
     }
 }
