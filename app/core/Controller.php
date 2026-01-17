@@ -1,14 +1,22 @@
 <?php
+use Jenssegers\Blade\Blade;
 class Controller
 {
     public function view($path, $data)
     {
-        $viewFile = VIEW_PATH . "/$path" . ".php";
-        if (!file_exists($viewFile)) {
-            throw new Exception("view file not found");
+        // $viewFile = VIEW_PATH . "/$path" . ".php";
+        // if (!file_exists($viewFile)) {
+        //     throw new Exception("view file not found");
+        // }
+        // extract($data, EXTR_SKIP);
+        // require $viewFile;
+        $blade = new Blade('views', 'cache');
+        $viewPath = VIEW_PATH. "/$view.blade.php";
+        return $blade->make($viewPath, $data)->render();
+        if(!file_exists($viewPath)){
+            return $this->notFound("View not found");
         }
-        extract($data, EXTR_SKIP);
-        require $viewFile;
+        return $blade->make($viewPath, $data)->render();
     }
     public function model($name) {
         $class = ucfirst($name);

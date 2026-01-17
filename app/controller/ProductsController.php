@@ -17,7 +17,7 @@ class ProductsController extends Controller {
         $this->view('products/add', []); 
     }
 
-    public function store() {
+    public function them() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'];
             $price = $_POST['price'];
