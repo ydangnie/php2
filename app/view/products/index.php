@@ -1,5 +1,5 @@
 <h2>Danh sách sản phẩm</h2>
-<a href="/product/add">Thêm sản phẩm mới</a>
+<a href="/products/add">Thêm sản phẩm mới</a>
 <table border="1">
     <tr>
         <th>ID</th>
@@ -13,8 +13,8 @@
         <td><?= $product['name'] ?></td>
         <td><?= $product['price'] ?></td>
         <td>
-            <a href="/product/edit/<?= $product['id'] ?>">Sửa</a> | 
-            <a href="/product/delete/<?= $product['id'] ?>" onclick="return confirm('Xóa hả?')">Xóa</a>
+            <a href="/products/edit/<?= $product['id'] ?>">Sửa</a> | 
+            <a href="/products/delete/<?= $product['id'] ?>" onclick="return confirm('Xóa hả?')">Xóa</a>
         </td>
     </tr>
     <?php endforeach; ?>

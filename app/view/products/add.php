@@ -1,5 +1,5 @@
 <h2>Thêm sản phẩm</h2>
-<form action="/product/store" method="POST">
+<form action="/products/store" method="POST">
     <label>Tên:</label>
     <input type="text" name="name" required><br>
     <label>Giá:</label>

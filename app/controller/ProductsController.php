@@ -3,53 +3,49 @@ class ProductsController extends Controller {
     private $productModel;
 
     public function __construct() {
-        // Load model
         $this->productModel = $this->model('ProductModel');
     }
 
-    // 1. READ: Hiển thị danh sách
     public function index() {
         $products = $this->productModel->all();
-        // Gọi view và truyền dữ liệu
-        $this->view('product/index', ['products' => $products]);
+        // Sửa 'product' thành 'products'
+        $this->view('products/index', ['products' => $products]); 
     }
 
-    // 2. CREATE: Hiển thị form thêm
     public function add() {
-        $this->view('product/add', []);
+      
+        $this->view('products/add', []); 
     }
 
-    // 2. CREATE: Xử lý lưu dữ liệu
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'];
             $price = $_POST['price'];
-            
             $this->productModel->create(['name' => $name, 'price' => $price]);
-            $this->redirect('product/index'); // Quay về danh sách
+        
+            $this->redirect('localhost:8000/products/index'); 
         }
     }
 
-    // 3. UPDATE: Hiển thị form sửa
     public function edit($id) {
         $product = $this->productModel->find($id);
-        $this->view('product/edit', ['product' => $product]);
+        // Sửa 'product' thành 'products'
+        $this->view('products/edit', ['product' => $product]); 
     }
 
-    // 3. UPDATE: Xử lý cập nhật
     public function update_product($id) {
          if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'];
             $price = $_POST['price'];
-
             $this->productModel->update(['name' => $name, 'price' => $price], $id);
-            $this->redirect('product/index');
-         }
+            // Sửa đường dẫn redirect
+            $this->redirect('products/index'); 
+        }
     }
 
-    // 4. DELETE: Xóa
     public function delete($id) {
         $this->productModel->delete($id);
-        $this->redirect('product/index');
+        // Sửa đường dẫn redirect
+        $this->redirect('localhost:8000/products/index'); 
     }
 }
