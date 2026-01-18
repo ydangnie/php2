@@ -1,32 +1,36 @@
-<?php 
+<?php
+
 define('BASE_PATH', dirname(__DIR__, 2));
 define('APP_PATH', BASE_PATH . '/app');
-define('VIEW_PATH', APP_PATH . '/view'); 
-define('CONTROLLER_PATH', APP_PATH . '/controller');
-define('MODEL_PATH', APP_PATH. '/models');
+define('VIEW_PATH', APP_PATH . '/views');
+define('CONTROLLER_PATH', APP_PATH . '/controllers');
+define('MODEL_PATH', APP_PATH . '/models');
 
 $vendorAutoload = BASE_PATH . "/vendor/autoload.php";
-if(file_exists($vendorAutoload)){
+var_dump($vendorAutoload);
+if (file_exists($vendorAutoload)) {
+    echo "exist here";
     require_once $vendorAutoload;
-}else{
-   echo "not working";
+} else {
+    echo "not working";
 }
-if(class_exists(\Dotenv\Dotenv::class)){
-   Dotenv\Dotenv::createImmutable(BASE_PATH)->safeLoad();
+
+if (class_exists(\Dotenv\Dotenv::class)) {
+    \Dotenv\Dotenv::createImmutable(BASE_PATH)->safeLoad();
 }
+
 var_dump($_ENV);
+spl_autoload_register(function (string $class): void {
+    $paths = [
+        APP_PATH . '/core/' . $class . '.php',
+        CONTROLLER_PATH . '/' . $class . '.php',
+        MODEL_PATH . '/' . $class . '.php',
+    ];
 
-spl_autoload_register(function (string $class) {
- $paths = [
-    APP_PATH. '/core/' . $class . '.php',
-    CONTROLLER_PATH. '/' . $class . '.php',
-    MODEL_PATH. '/'. $class . '.php',
- ];
-
- foreach ($paths as $path){
-    if(file_exists($path)){
-        require_once $path;
-        return;
+    foreach ($paths as $path) {
+        if (file_exists($path)) {
+            require_once $path;
+            return;
+        }
     }
- }
 });
