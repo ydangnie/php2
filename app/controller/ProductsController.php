@@ -1,4 +1,5 @@
 <?php
+
 class ProductsController extends Controller {
     private $productModel;
 
