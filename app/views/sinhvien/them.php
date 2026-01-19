@@ -1,5 +1,5 @@
 <h2>Thêm sản phẩm</h2>
-<form action="/sinhvien/store" method="POST">
+<form action="/sinhvien/luu" method="POST">
     <label>MSSV:</label>
     <input type="text" name="mssv" required><br>
     <label>Họ tên sinh viên:</label>

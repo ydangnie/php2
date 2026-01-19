@@ -11,6 +11,13 @@ class AuthModel extends Model {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function timnguoidung($ten){
+         $sql = "SELECT * FROM $this->table WHERE ten = :ten";
+           $conn = $this->connect();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['ten' => $ten]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     public function find($id) {
         $sql = "SELECT * FROM $this->table WHERE id = :id";
         $conn = $this->connect();
@@ -46,4 +53,5 @@ class AuthModel extends Model {
         $stmt = $conn->prepare($sql);
         return $stmt->execute(['id' => $id]);
     }
+   
 }

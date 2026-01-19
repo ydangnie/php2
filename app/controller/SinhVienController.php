@@ -12,19 +12,20 @@ class SinhVienController extends Controller {
         $this->view('sinhvien/index', ['sinhvien' => $sinhvien]); 
     }
 
-    public function add() {
+    public function them() {
       
         $this->view('sinhvien/them', []); 
     }
 
-    public function store() {
+    public function luu() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mssv = $_POST['mssv'];
             $hotensv = $_POST['hotensv'];
             $nganh = $_POST['nganh'];
             $this->SinhVienModel->create(['mssv' => $mssv, 'hotensv' => $hotensv, 'nganh' => $nganh]);
         
-            $this->redirect('localhost:8000/sinhvien/index'); 
+            $this->redirect('http://localhost:8000/sinhvien/index'); 
+           
         }
     }
 
@@ -41,12 +42,12 @@ class SinhVienController extends Controller {
             $nganh = $_POST['nganh'];
             $this->SinhVienModel->create(['mssv' => $mssv, 'hotensv' => $hotensv, 'nganh' => $nganh]);
             
-            $this->redirect('sinhvien/index'); 
+             $this->redirect('http://localhost:8000/sinhvien/index'); 
         }
     }
 
     public function delete($id) {
         $this->SinhVienModel->delete($id);
-        $this->redirect('localhost:8000/sinhvien/index'); 
+         $this->redirect('http://localhost:8000/sinhvien/index'); 
     }
 }

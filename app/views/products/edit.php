@@ -1,5 +1,5 @@
 <h2>Sửa sản phẩm</h2>
-<form action="/product/update_product/<?= $product['id'] ?>" method="POST">
+<form action="/products/update_product/<?= $product['id'] ?>" method="POST">
     <label>Tên:</label>
     <input type="text" name="name" value="<?= $product['name'] ?>" required><br>
     <label>Giá:</label>

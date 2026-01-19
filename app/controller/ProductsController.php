@@ -22,9 +22,11 @@ class ProductsController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'];
             $price = $_POST['price'];
-            $this->productModel->create(['name' => $name, 'price' => $price]);
+            $mota = $_POST['mota'];
+            $img = $_POST['img'];
+            $this->productModel->create(['name' => $name, 'price' => $price, 'mota' => $mota, 'img' => $img]);
         
-            $this->redirect('localhost:8000/products/index'); 
+            $this->redirect('http://localhost:8000/products/index'); 
         }
     }
 
@@ -38,15 +40,17 @@ class ProductsController extends Controller {
          if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'];
             $price = $_POST['price'];
-            $this->productModel->update(['name' => $name, 'price' => $price], $id);
+              $mota = $_POST['mota'];
+            $img = $_POST['img'];
+            $this->productModel->update(['name' => $name, 'price' => $price, 'mota' => $mota, 'img' => $img], $id);
             // Sửa đường dẫn redirect
-            $this->redirect('products/index'); 
+            $this->redirect('http://localhost:8000/products/index');
         }
     }
 
     public function delete($id) {
         $this->productModel->delete($id);
         // Sửa đường dẫn redirect
-        $this->redirect('localhost:8000/products/index'); 
+        $this->redirect('http://localhost:8000/products/index');
     }
 }

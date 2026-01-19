@@ -32,13 +32,14 @@ class SinhVienModel extends Model {
     }
 
     public function update($data, $id) {
-         $sql = "INSERT INTO $this->table (mssv, hotensv,  nganh) VALUES (:mssv, :hotensv, :nganh)";
+        $sql = "UPDATE $this->table SET mssv = :mssv, hotensv = :hotensv, nganh = :nganh WHERE id = :id";
         $conn = $this->connect();
         $stmt = $conn->prepare($sql);
         return $stmt->execute([
             'mssv' => $data['mssv'],
             'hotensv' => $data['hotensv'],
-             'nganh' => $data['nganh']
+             'nganh' => $data['nganh'],
+             'id' => $id
         ]);
     }
 

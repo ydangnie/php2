@@ -1,5 +1,5 @@
 <h2>Danh sách sản phẩm</h2>
-<a href="/sinhvien/add">Thêm sản phẩm mới</a>
+<a href="/sinhvien/them">Thêm sản phẩm mới</a>
 <table border="1">
     <tr>
         <th>ID</th>
