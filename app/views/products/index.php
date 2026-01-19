@@ -12,7 +12,7 @@
     <?php foreach ($products as $product): ?>
     <tr>
         <td><?= $product['id'] ?></td>
-        <td><?= $product['img'] ?></td>
+        <td> <img src="/uploads/<?= $product['img'] ?>" alt="" width="50px"></td>
         <td><?= $product['name'] ?></td>
     
         <td><?= $product['price'] ?></td>

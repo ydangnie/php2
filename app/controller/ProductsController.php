@@ -23,7 +23,15 @@ class ProductsController extends Controller {
             $name = $_POST['name'];
             $price = $_POST['price'];
             $mota = $_POST['mota'];
-            $img = $_POST['img'];
+            if(isset($_FILES['img']) && $_FILES['img']['error'] === 0){
+                $img =  $_FILES['img']['name'];
+                $thumuc = "uploas/";
+                $thumucluu = $thumuc . basename($img);
+                move_uploaded_file($_FILES['img']['tmp_name'], $thumucluu);
+
+
+
+            }
             $this->productModel->create(['name' => $name, 'price' => $price, 'mota' => $mota, 'img' => $img]);
         
             $this->redirect('http://localhost:8000/products/index'); 
@@ -41,7 +49,19 @@ class ProductsController extends Controller {
             $name = $_POST['name'];
             $price = $_POST['price'];
               $mota = $_POST['mota'];
-            $img = $_POST['img'];
+            $img = "";
+            if(isset($_FILES['img']) && $_FILES['img']['error'] === 0){
+                $img =  $_FILES['img']['name'];
+                $thumuc = "uploas/";
+                $thumucluu = $thumuc . basename($img);
+                move_uploaded_file($_FILES['img']['tmp_name'], $thumucluu);
+
+
+
+            }
+
+
+
             $this->productModel->update(['name' => $name, 'price' => $price, 'mota' => $mota, 'img' => $img], $id);
             // Sửa đường dẫn redirect
             $this->redirect('http://localhost:8000/products/index');
