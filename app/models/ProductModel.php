@@ -56,5 +56,15 @@ class ProductModel extends Model
         $stmt = $conn->prepare($sql);
         return $stmt->execute(['id' => $id]);
     }
+       public function timkiem($tukhoa){
+        $sql = "SELECT * FROM $this->table WHERE name LIKE :tukhoa ";
+        $conn =$this->connect();
+        $stmt = $conn->prepare($sql);
+
+        $search = "%". $tukhoa ."%";
+        $stmt->execute(['tukhoa' => $search]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
   
 }

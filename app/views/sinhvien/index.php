@@ -1,5 +1,51 @@
 <?php
-session_start(); 
+
+use Dba\Connection;
+
+class sinhvien
+{
+  public $mssv;
+  public $ten;
+  public $diem;
+
+  public function __construct($mssv, $ten, $diem)
+  {
+
+    $this->mssv = $mssv;
+    $this->ten = $ten;
+    $this->diem = $diem;
+  }
+  public function inSV()
+  {
+    echo "Thông tin sinh viên</br>";
+    echo  "MSSV " . $this->mssv;
+    echo "</br>Tên " . $this->ten;
+
+    echo "</br>Điểm  " . $this->diem;
+  }
+  public function xeploai()
+  {
+    if ($this->diem >= 9) {
+      echo "Xuất sắc";
+    } elseif ($this->diem >= 8) {
+      echo "Giỏi ";
+    }elseif ($this->diem >= 7){
+      echo " Khá ";
+    }elseif ($this->diem >= 5){
+      echo "Trung bình";
+    }else{
+      echo "  Yếu";
+    }
+  }
+
+};
+$sv1 = new sinhvien('pk01', 'huy', 7);
+
+$sv1->inSV();
+
+$sv1->xeploai();
+
+
 ?>
 <h2>Danh sách sinh viên</h2>
 <?php if(isset($_SESSION['thongbao'])): ?>

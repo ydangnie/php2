@@ -19,13 +19,13 @@ private $thongbao;
         
         // Truyền biến $keyword qua view để giữ lại giá trị trong ô input sau khi tìm (UX tốt hơn)
         $data = ['sinhvien' => $sinhvien];
-        if (isset($keyword)) {
+        if (isset($tukhoa)) {
             $data['tukhoa'] = $tukhoa;
         }
 
        $this->view('sinhvien/index', [
             'sinhvien' => $sinhvien,
-            'keyword' => $tukhoa
+            'tukhoa' => $tukhoa
         ]);
     }
 
@@ -60,13 +60,18 @@ private $thongbao;
             $hotensv = $_POST['hotensv'];
             $nganh = $_POST['nganh'];
             $this->SinhVienModel->update(['mssv' => $mssv, 'hotensv' => $hotensv, 'nganh' => $nganh], $id);
-            $_SESSION['thongbao'] = "Thêm sinh viên thành công";
+            $_SESSION['thongbao'] = "Cập nhật sinh viên thành công";
              $this->redirect('http://localhost:8000/sinhvien/index'); 
         }
     }
 
     public function delete($id) {
         $this->SinhVienModel->delete($id);
+        $_SESSION['thongbao'] = "Xóa sinh viên thành công";
          $this->redirect('http://localhost:8000/sinhvien/index'); 
+    }
+    public function test() {
+        // Gọi đến file view bạn vừa sửa
+        $this->view('sinhvien/sinhvien', []); 
     }
 }

@@ -4,5 +4,7 @@
     <input type="text" name="name" value="<?= $product['name'] ?>" required><br>
     <label>Giá:</label>
     <input type="number" name="price" value="<?= $product['price'] ?>" required><br>
+    <label>Giá:</label>
+    <input type="file" name="img" value="<?= $product['img'] ?>" required><br>
     <button type="submit">Cập nhật</button>
 </form>
