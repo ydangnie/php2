@@ -22,25 +22,27 @@ class SinhVienController extends Controller {
             $mssv = $_POST['mssv'];
             $hotensv = $_POST['hotensv'];
             $nganh = $_POST['nganh'];
+            if(empty($mssv) || empty($hotensv) || empty($nganh)){
+                echo "Dữ liệu không được để trống";
+                return;
+            }
             $this->SinhVienModel->create(['mssv' => $mssv, 'hotensv' => $hotensv, 'nganh' => $nganh]);
         
             $this->redirect('http://localhost:8000/sinhvien/index'); 
            
         }
     }
-
     public function edit($id) {
         $sinhvien = $this->SinhVienModel->find($id);
    
         $this->view('sinhvien/edit', ['sinhvien' => $sinhvien]); 
     }
-
     public function update_sinhvien($id) {
          if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-           $mssv = $_POST['mssv'];
+            $mssv = $_POST['mssv'];
             $hotensv = $_POST['hotensv'];
             $nganh = $_POST['nganh'];
-            $this->SinhVienModel->create(['mssv' => $mssv, 'hotensv' => $hotensv, 'nganh' => $nganh]);
+            $this->SinhVienModel->update(['mssv' => $mssv, 'hotensv' => $hotensv, 'nganh' => $nganh], $id);
             
              $this->redirect('http://localhost:8000/sinhvien/index'); 
         }

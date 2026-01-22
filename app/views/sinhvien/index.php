@@ -14,8 +14,10 @@
         <td><?= $sv['hotensv'] ?></td>
         <td><?= $sv['nganh'] ?></td>
         <td>
-            <a>Sửa</a> | 
-            <a>Xóa</a>
+              <td>
+            <a href="/sinhvien/edit/<?= $sv['id'] ?>">Sửa</a> | 
+            <a href="/sinhvien/delete/<?= $sv['id'] ?>" onclick="return confirm('Xóa hả?')">Xóa</a>
+        </td>
         </td>
     </tr>
     <?php endforeach; ?>
