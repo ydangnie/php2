@@ -1,15 +1,32 @@
 <?php
 class SinhVienController extends Controller {
     private $SinhVienModel;
-
+private $thongbao;
     public function __construct() {
         $this->SinhVienModel = $this->model('SinhVienModel');
     }
 
-    public function index() {
-        $sinhvien = $this->SinhVienModel->all();
+ public function index() {
+        // Kiểm tra xem có từ khóa tìm kiếm trên URL không
+        if (isset($_GET['tukhoa']) && !empty($_GET['tukhoa'])) {
+            $tukhoa = $_GET['tukhoa'];
+            $sinhvien = $this->SinhVienModel->timKiem($tukhoa);
+        } else {
+            // Nếu không tìm kiếm, lấy tất cả danh sách
+            $sinhvien = $this->SinhVienModel->all();
+            $tukhoa = "";
+        }
         
-        $this->view('sinhvien/index', ['sinhvien' => $sinhvien]); 
+        // Truyền biến $keyword qua view để giữ lại giá trị trong ô input sau khi tìm (UX tốt hơn)
+        $data = ['sinhvien' => $sinhvien];
+        if (isset($keyword)) {
+            $data['tukhoa'] = $tukhoa;
+        }
+
+       $this->view('sinhvien/index', [
+            'sinhvien' => $sinhvien,
+            'keyword' => $tukhoa
+        ]);
     }
 
     public function them() {
@@ -27,7 +44,7 @@ class SinhVienController extends Controller {
                 return;
             }
             $this->SinhVienModel->create(['mssv' => $mssv, 'hotensv' => $hotensv, 'nganh' => $nganh]);
-        
+         $_SESSION['thongbao'] = "Thêm sinh viên thành công";
             $this->redirect('http://localhost:8000/sinhvien/index'); 
            
         }
@@ -43,7 +60,7 @@ class SinhVienController extends Controller {
             $hotensv = $_POST['hotensv'];
             $nganh = $_POST['nganh'];
             $this->SinhVienModel->update(['mssv' => $mssv, 'hotensv' => $hotensv, 'nganh' => $nganh], $id);
-            
+            $_SESSION['thongbao'] = "Thêm sinh viên thành công";
              $this->redirect('http://localhost:8000/sinhvien/index'); 
         }
     }
