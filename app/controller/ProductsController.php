@@ -11,25 +11,33 @@ class ProductsController extends Controller
 
     public function index()
     {
-           // Kiểm tra xem có từ khóa tìm kiếm trên URL không
         if (isset($_GET['tukhoa']) && !empty($_GET['tukhoa'])) {
             $tukhoa = $_GET['tukhoa'];
             $products = $this->productModel->timKiem($tukhoa);
         } else {
-            // Nếu không tìm kiếm, lấy tất cả danh sách
             $products = $this->productModel->all();
             $tukhoa = "";
         }
-        
-        // Truyền biến $keyword qua view để giữ lại giá trị trong ô input sau khi tìm (UX tốt hơn)
-        $data = ['sinhvien' => $products];
+        $data = ['products' => $products];
         if (isset($tukhoa)) {
             $data['tukhoa'] = $tukhoa;
         }
 
-       $this->view('products/index', [
+        $limit = 5;
+
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        if ($page < 1) $page = 1;
+        $offset = ($page - 1) * $limit;
+        $totalProduct = $this->productModel->countAll();
+        $totalPages = ceil($totalProduct / $limit);
+
+        $products = $this->productModel->paginate($offset, $limit);
+
+        $this->view('products/index', [
             'products' => $products,
-            'tukhoa' => $tukhoa
+            'tukhoa' => $tukhoa,
+            'totalPages' => $totalPages,
+            'page' => $page
         ]);
     }
 
@@ -45,7 +53,7 @@ class ProductsController extends Controller
             $name = $_POST['name'];
             $price = $_POST['price'];
             $mota = $_POST['mota'];
-            
+
             if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
                 $img =  $_FILES['img']['name'];
                 $thumuc = "uploads/";

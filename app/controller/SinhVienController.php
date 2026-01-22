@@ -16,8 +16,6 @@ private $thongbao;
             $sinhvien = $this->SinhVienModel->all();
             $tukhoa = "";
         }
-        
-        // Truyền biến $keyword qua view để giữ lại giá trị trong ô input sau khi tìm (UX tốt hơn)
         $data = ['sinhvien' => $sinhvien];
         if (isset($tukhoa)) {
             $data['tukhoa'] = $tukhoa;

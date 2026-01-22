@@ -52,6 +52,20 @@
             <a href="/products/delete/<?= $product['id'] ?>" onclick="return confirm('Xóa hả?')">Xóa</a>
         </td>
     </tr>
+    
     <?php endforeach; ?>
     <?php endif; ?>
 </table>
+<table border="1">
+    </table>
+
+<div style="margin-top: 20px;">
+    <strong>Trang: </strong>
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <a href="/products/index?page=<?= $i ?>" 
+           style="padding: 5px 10px; border: 1px solid #ccc; margin-right: 5px; text-decoration: none; 
+                  <?= ($i == $page) ? 'background-color: #007bff; color: white;' : '' ?>">
+           <?= $i ?>
+        </a>
+    <?php endfor; ?>
+</div>
