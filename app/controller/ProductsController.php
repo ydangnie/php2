@@ -4,35 +4,36 @@ class ProductsController extends Controller
 {
     private $productModel;
 
-    public function __construct()
-    {
-        $this->productModel = $this->model('ProductModel');
-    }
-
+  
+public function __construct()
+{
+    throw new \Exception('Not implemented');
+}
     public function index()
     {
-        if (isset($_GET['tukhoa']) && !empty($_GET['tukhoa'])) {
-            $tukhoa = $_GET['tukhoa'];
-            $products = $this->productModel->timKiem($tukhoa);
-        } else {
-            $products = $this->productModel->all();
-            $tukhoa = "";
-        }
-        $data = ['products' => $products];
-        if (isset($tukhoa)) {
-            $data['tukhoa'] = $tukhoa;
-        }
-
         $limit = 5;
-
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         if ($page < 1) $page = 1;
         $offset = ($page - 1) * $limit;
         $totalProduct = $this->productModel->countAll();
         $totalPages = ceil($totalProduct / $limit);
 
-        $products = $this->productModel->paginate($offset, $limit);
+        if (isset($_GET['tukhoa']) && !empty($_GET['tukhoa'])) {
+            $tukhoa = $_GET['tukhoa'];
+            $products = $this->productModel->timKiem($tukhoa);
+        } else {
 
+            $products = $this->productModel->all();
+            $tukhoa = "";
+
+
+            $products = $this->productModel->paginate($offset, $limit);
+        }
+
+        $data = ['products' => $products];
+        if (isset($tukhoa)) {
+            $data['tukhoa'] = $tukhoa;
+        }
         $this->view('products/index', [
             'products' => $products,
             'tukhoa' => $tukhoa,
