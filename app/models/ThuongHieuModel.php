@@ -1,8 +1,8 @@
 <?php
 // Class name phải khớp với tên file để autoload hoạt động
-class DanhMucModel extends Model
+class ThuongHieuModel extends Model
 {
-    private $table = "danhmuc";
+    private $table = "thuonghieu";
 
     public function all()
     {
@@ -24,22 +24,22 @@ class DanhMucModel extends Model
 
     public function create($data)
     {
-        $sql = "INSERT INTO $this->table (tendanhmuc, img) VALUES (:tendanhmuc, :img)";
+        $sql = "INSERT INTO $this->table (tenthuonghieu, img) VALUES (:tenthuonghieu, :img)";
         $conn = $this->connect();
         $stmt = $conn->prepare($sql);
         return $stmt->execute([
-            'tendanhmuc' => $data['tendanhmuc'],
+            'tenthuonghieu' => $data['tenthuonghieu'],
             'img' => $data['img']
         ]);
     }
 
     public function update($data, $id)
     {
-        $sql = "UPDATE $this->table SET tendanhmuc = :tendanhmuc, img = :img WHERE id = :id";
+        $sql = "UPDATE $this->table SET tenthuonghieu = :tenthuonghieu, img = :img WHERE id = :id";
         $conn = $this->connect();
         $stmt = $conn->prepare($sql);
         return $stmt->execute([
-            'tendanhmuc' => $data['tendanhmuc'],
+            'tenthuonghieu' => $data['tenthuonghieu'],
             'img' => $data['img'],
             'id' => $id
         ]);

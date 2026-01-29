@@ -1,26 +1,26 @@
 <?php
 
-class DanhMucController extends Controller {
-    private $DanhMucModel;
+class ThuongHieuController extends Controller {
+    private $ThuongHieuModel;
 
     public function __construct() {
-        $this->DanhMucModel = $this->model('DanhMucModel');
+        $this->ThuongHieuModel = $this->model('ThuongHieuModel');
     }
 
     public function index() {
-        $danhmuc = $this->DanhMucModel->all();
+        $thuonghieu = $this->ThuongHieuModel;
         // Sửa 'product' thành 'products'
-        $this->view('danhmuc/index', ['danhmuc' => $danhmuc]); 
+        $this->view('thuonghieu/index', ['thuonghieu' => $thuonghieu]); 
     }
 
     public function them() {
       
-        $this->view('danhmuc/them', []); 
+        $this->view('thuonghieu/them', []); 
     }
 
     public function luu() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $tendanhmuc = $_POST['tendanhmuc'];
+            $tenthuonghieu = $_POST['tenthuonghieu'];
             if(isset($_FILES['img']) && $_FILES['img']['error'] === 0){
                 $img =  $_FILES['img']['name'];
                 $thumuc = "uploads/";
@@ -30,21 +30,21 @@ class DanhMucController extends Controller {
 
 
             }
-            $this->DanhMucModel->create(['tendanhmuc' => $tendanhmuc, 'img' => $img]);
+            $this->ThuongHieuModel->create(['tenthuonghieu' => $tenthuonghieu, 'img' => $img]);
         
-            $this->redirect('http://localhost:8000/danhmuc/index'); 
+            $this->redirect('http://localhost:8000/thuonghieu/index'); 
         }
     }
 
     public function edit($id) {
-        $danhmuc = $this->DanhMucModel->find($id);
+        $thuonghieu = $this->ThuongHieuModel->find($id);
         // Sửa 'product' thành 'products'
-        $this->view('danhmuc/edit', ['danhmuc' => $danhmuc]); 
+        $this->view('thuonghieu/edit', ['thuonghieu' => $thuonghieu]); 
     }
 
     public function update_product($id) {
          if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $tendanhmuc = $_POST['tendanhmuc'];
+            $tenthuonghieu = $_POST['tenthuonghieu'];
             $img = "";
             if(isset($_FILES['img']) && $_FILES['img']['error'] === 0){
                 $img =  $_FILES['img']['name'];
@@ -58,25 +58,25 @@ class DanhMucController extends Controller {
 
 
 
-            $this->DanhMucModel->update(['tendanhmuc' => $tendanhmuc, 'img' => $img], $id);
+            $this->ThuongHieuModel->update(['tenthuonghieu' => $tenthuonghieu, 'img' => $img], $id);
             // Sửa đường dẫn redirect
-            $this->redirect('http://localhost:8000/danhmuc/index');
+            $this->redirect('http://localhost:8000/thuonghieu/index');
         }
     }
 
     public function delete($id) {
-        $danhmuc = $this->DanhMucModel->find($id);
-        $this->DanhMucModel->delete($id);
+        $thuonghieu = $this->ThuongHieuModel->find($id);
+        $this->ThuongHieuModel->delete($id);
         // Sửa đường dẫn redirect
-        if($danhmuc){
-            if(!empty($danhmuc['img'])){
-                $hinhanhxoa = 'uploads/' . $danhmuc['img'];
+        if($thuonghieu){
+            if(!empty($thuonghieu['img'])){
+                $hinhanhxoa = 'uploads/' . $thuonghieu['img'];
                 if(file_exists($hinhanhxoa)){
                     unlink($hinhanhxoa);
                 }
             }
         }
         
-        $this->redirect('http://localhost:8000/danhmuc/index');
+        $this->redirect('http://localhost:8000/thuonghieu/index');
     }
 }

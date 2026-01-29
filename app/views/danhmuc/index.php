@@ -11,9 +11,9 @@
         <td><?= $dm['id'] ?></td>
         <td><?= $dm['tendanhmuc'] ?></td>
          <td> <img src="/uploads/<?= $dm['img'] ?>" alt="" width="50px"></td>
-        <td>
-            <a>Sửa</a> | 
-            <a>Xóa</a>
+          <td>
+            <a href="/danhmuc/edit/<?= $dm['id'] ?>">Sửa</a> | 
+            <a href="/danhmuc/delete/<?= $dm['id'] ?>" onclick="return confirm('Xóa hả?')">Xóa</a>
         </td>
     </tr>
     <?php endforeach; ?>

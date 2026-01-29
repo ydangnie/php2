@@ -7,7 +7,7 @@ class ProductsController extends Controller
   
 public function __construct()
 {
-    throw new \Exception('Not implemented');
+ $this->productModel = $this->model('ProductModel');
 }
     public function index()
     {
