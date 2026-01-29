@@ -3,12 +3,15 @@
 class ProductsController extends Controller
 {
     private $productModel;
+    private $ThuongHieuModel;
+    private $DanhMucModel;
 
-  
-public function __construct()
-{
- $this->productModel = $this->model('ProductModel');
-}
+    public function __construct()
+    {
+        $this->DanhMucModel = $this->model('DanhMucModel');
+        $this->ThuongHieuModel = $this->model('ThuongHieuModel');
+        $this->productModel = $this->model('ProductModel');
+    }
     public function index()
     {
         $limit = 5;
@@ -24,10 +27,11 @@ public function __construct()
         } else {
 
             $products = $this->productModel->all();
+
             $tukhoa = "";
 
 
-            $products = $this->productModel->paginate($offset, $limit);
+            $products = $this->productModel->phantrang($offset, $limit);
         }
 
         $data = ['products' => $products];
@@ -45,7 +49,10 @@ public function __construct()
     public function add()
     {
 
-        $this->view('products/add', []);
+
+        $danhmuc = $this->DanhMucModel->all();
+        $thuonghieu = $this->ThuongHieuModel->all();
+        $this->view('products/add', ['danhmuc' => $danhmuc, 'thuonghieu' => $thuonghieu]);
     }
 
     public function them()
@@ -54,6 +61,8 @@ public function __construct()
             $name = $_POST['name'];
             $price = $_POST['price'];
             $mota = $_POST['mota'];
+            $danhmuc_id = $_POST['danhmuc_id'];
+            $thuonghieu_id = $_POST['thuonghieu_id'];
 
             if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
                 $img =  $_FILES['img']['name'];
@@ -61,7 +70,15 @@ public function __construct()
                 $thumucluu = $thumuc . basename($img);
                 move_uploaded_file($_FILES['img']['tmp_name'], $thumucluu);
             }
-            $this->productModel->create(['name' => $name, 'price' => $price, 'mota' => $mota, 'img' => $img]);
+            $this->productModel->create([
+                'name' => $name,
+                'price' => $price,
+                'mota' => $mota,
+                'img' => $img,
+                'danhmuc_id' => $danhmuc_id,
+                'thuonghieu_id' => $thuonghieu_id
+            ]);
+
             $_SESSION['thongbao'] = "Thêm sản phẩm thành công";
             $this->redirect('http://localhost:8000/products/index');
         }
@@ -69,7 +86,9 @@ public function __construct()
     public function edit($id)
     {
         $product = $this->productModel->find($id);
-        $this->view('products/edit', ['product' => $product]);
+        $danhmuc_id = $this->DanhMucModel->find($id);
+        $thuonghieu_id = $this->ThuongHieuModel->find($id);
+        $this->view('products/edit', ['product' => $product, 'danhmuc_id' => $danhmuc_id, 'thuonghieu_id' => $thuonghieu_id]);
     }
 
     public function update_product($id)
@@ -79,13 +98,23 @@ public function __construct()
             $price = $_POST['price'];
             $mota = $_POST['mota'];
             $img = "";
+            $danhmuc_id = $_POST['danhmuc_id'];
+            $thuonghieu_id = $_POST['thuonghieu_id'];
+
             if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
                 $img =  $_FILES['img']['name'];
                 $thumuc = "uploads/";
                 $thumucluu = $thumuc . basename($img);
                 move_uploaded_file($_FILES['img']['tmp_name'], $thumucluu);
             }
-            $this->productModel->update(['name' => $name, 'price' => $price, 'mota' => $mota, 'img' => $img], $id);
+            $this->productModel->update([
+                'name' => $name,
+                'price' => $price,
+                'mota' => $mota,
+                'img' => $img,
+                'danhmuc_id' => $danhmuc_id,
+                'thuonghieu_id' => $thuonghieu_id
+            ], $id);
             $_SESSION['thongbao'] = "Cập nhật sản phẩm thành công";
             $this->redirect('http://localhost:8000/products/index');
         }
@@ -94,6 +123,7 @@ public function __construct()
     public function delete($id)
     {
         $product = $this->productModel->find($id);
+
         $this->productModel->delete($id);
         if ($product) {
             if (!empty($product['img'])) {

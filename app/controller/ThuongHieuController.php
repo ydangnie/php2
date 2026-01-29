@@ -8,7 +8,7 @@ class ThuongHieuController extends Controller {
     }
 
     public function index() {
-        $thuonghieu = $this->ThuongHieuModel;
+        $thuonghieu = $this->ThuongHieuModel->all();
         // Sửa 'product' thành 'products'
         $this->view('thuonghieu/index', ['thuonghieu' => $thuonghieu]); 
     }
