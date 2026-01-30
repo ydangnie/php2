@@ -1,6 +1,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-@include('layout.nav')
+<?php echo $__env->make('layout.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 <h2>Danh sách sản phẩm</h2>
 <a href="/products/add">Thêm sản phẩm mới</a>
 
@@ -79,4 +79,4 @@
             <?= $i ?>
         </a>
     <?php endfor; ?>
-</div>
+</div><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/admin/products/index.blade.php ENDPATH**/ ?>

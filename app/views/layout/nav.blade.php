@@ -1,72 +1,185 @@
-<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    /* CSS Độc nhất cho Nav - Không ảnh hưởng trang khác */
+    #unique-master-header {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background: rgba(255, 255, 255, 0.98); /* Màu trắng đục nhẹ */
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        z-index: 9999; /* Quan trọng: Đảm bảo menu nằm trên Hero Banner */
+        position: sticky; /* Dính menu khi cuộn */
+        top: 0;
+    }
+
+    /* Hiệu ứng Logo */
+    #unique-master-header .navbar-brand img {
+        transition: transform 0.3s;
+        max-height: 50px; /* Giới hạn chiều cao logo để không vỡ khung */
+        width: auto;
+    }
+    #unique-master-header .navbar-brand:hover img {
+        transform: scale(1.05);
+    }
+
+    /* Link menu */
+    #unique-master-header .umh-link {
+        color: #2c3e50;
+        font-weight: 600;
+        font-size: 0.95rem;
+        padding: 8px 16px !important;
+        text-transform: uppercase;
+        position: relative;
+        transition: color 0.3s;
+    }
+    
+    /* Hiệu ứng gạch chân hover */
+    #unique-master-header .umh-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 50%;
+        background-color: #000;
+        transition: all 0.3s;
+        transform: translateX(-50%);
+    }
+    #unique-master-header .umh-link:hover::after {
+        width: 80%;
+    }
+    #unique-master-header .umh-link:hover {
+        color: #000;
+    }
+
+    /* Dropdown */
+    #unique-master-header .dropdown-menu {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        margin-top: 10px;
+        padding: 10px;
+    }
+    #unique-master-header .dropdown-item {
+        border-radius: 8px;
+        padding: 8px 15px;
+        font-weight: 500;
+    }
+    #unique-master-header .dropdown-item:hover {
+        background-color: #f8f9fa;
+        transform: translateX(5px);
+        transition: transform 0.2s;
+    }
+
+    /* Form tìm kiếm tròn */
+    .umh-search-group {
+        border: 1px solid #e1e1e1;
+        border-radius: 50px;
+        padding: 3px 5px;
+        background: #fff;
+        overflow: hidden;
+    }
+    .umh-search-input {
+        border: none;
+        box-shadow: none !important;
+        background: transparent;
+        font-size: 0.9rem;
+    }
+    .umh-search-btn {
+        border: none;
+        background: #000;
+        color: #fff;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .umh-search-btn:hover {
+        background: #333;
+    }
+
+    /* Icon User/Cart */
+    .umh-icon-action {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #f8f9fa;
+        color: #333;
+        position: relative;
+        transition: all 0.3s;
+    }
+    .umh-icon-action:hover {
+        background: #000;
+        color: #fff;
+    }
+</style>
+
+<nav id="unique-master-header" class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand fw-semibold" href="/home/trangchu"><img src="https://theme.hstatic.net/1000306633/1001194548/14/logo.png?v=491" alt="" width="200px"></a>
-  
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-  
-      <div id="nav" class="collapse navbar-collapse">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
-  
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-              Admin
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="../../products/index">Sản phẩm</a></li>
-              <li><a class="dropdown-item" href="/danhmuc/index">Danh mục</a></li>
-              <li><a class="dropdown-item" href="/thuonghieu/index">Thương hiệu</a></li>
-              <li><a class="dropdown-item" href="/tintuc/index">Tin tức</a></li>
-              <li><a class="dropdown-item" href="/users/index">Người dùng</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">All Categories</a></li>
+        <a class="navbar-brand" href="/">
+            <img src="https://theme.hstatic.net/1000306633/1001194548/14/logo.png?v=491" alt="Logo">
+        </a>
+
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#uniqueNavbarCollapse">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div id="uniqueNavbarCollapse" class="collapse navbar-collapse">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link umh-link active" href="/">Home</a></li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle umh-link" href="#" role="button" data-bs-toggle="dropdown">Quản Lý</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/products/index"><i class="fas fa-box me-2 text-muted"></i>Sản phẩm</a></li>
+                        <li><a class="dropdown-item" href="/danhmuc/index"><i class="fas fa-list me-2 text-muted"></i>Danh mục</a></li>
+                        <li><a class="dropdown-item" href="/thuonghieu/index"><i class="fas fa-tag me-2 text-muted"></i>Thương hiệu</a></li>
+                        <li><a class="dropdown-item" href="/tintuc/index"><i class="fas fa-newspaper me-2 text-muted"></i>Tin tức</a></li>
+                        <li><a class="dropdown-item" href="/users/index"><i class="fas fa-users me-2 text-muted"></i>Người dùng</a></li>
+                    </ul>
+                </li>
             </ul>
-          </li>
-        </ul>
-  
-        <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
-          
-          <form class="d-flex" role="search">
-            <div class="input-group">
-                <input class="form-control border-end-0 rounded-0" type="search" placeholder="Tìm sản phẩm..." />
-                <button class="btn btn-outline-dark border-start-0 rounded-0" type="submit">
-                    <i class="fas fa-search"></i>
-                </button>
+
+            <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+                <form class="d-flex" role="search">
+                    <div class="umh-search-group d-flex align-items-center">
+                        <input class="form-control umh-search-input" type="search" placeholder="Tìm kiếm..." />
+                        <button class="btn umh-search-btn" type="submit"><i class="fas fa-search fa-xs"></i></button>
+                    </div>
+                </form>
+
+                <a href="/cart" class="umh-icon-action text-decoration-none" title="Giỏ hàng">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" style="font-size: 0.6rem;">0</span>
+                </a>
+
+                @if(isset($_SESSION['login']))
+                    <div class="dropdown">
+                        <a class="text-dark text-decoration-none dropdown-toggle d-flex align-items-center gap-2 fw-bold" href="#" role="button" data-bs-toggle="dropdown">
+                            <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                {{ strtoupper(substr($_SESSION['login']['ten'] ?? 'M', 0, 1)) }}
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end mt-2">
+                            <li><a class="dropdown-item" href="/profile">Hồ sơ</a></li>
+                            <li><a class="dropdown-item" href="/orders">Đơn hàng</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="/auth/logout">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                @else
+                    <a href="/auth/dangnhap" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm" style="font-size: 0.85rem;">Login</a>
+                @endif
             </div>
-          </form>
-  
-          <a href="/cart" class="position-relative text-dark ms-2 text-decoration-none" title="Giỏ hàng">
-              <i class="fas fa-shopping-bag fa-lg"></i>
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-black text-white" style="font-size: 0.6rem;">
-                  0
-              </span>
-          </a>
-  
-          @if(isset($_SESSION['login']))
-              <div class="dropdown ms-2">
-                  <a class="text-dark text-decoration-none dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown">
-                      <i class="fas fa-user-circle me-1"></i> 
-                      {{ $_SESSION['login']['ten'] ?? 'Member' }}
-                  
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end rounded-0 mt-2 shadow-sm">
-                      <li><a class="dropdown-item" href="/profile"><i class="fas fa-id-card me-2 text-muted"></i>Hồ sơ</a></li>
-                      <li><a class="dropdown-item" href="/orders"><i class="fas fa-box me-2 text-muted"></i>Đơn hàng</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item text-danger" href="/auth/logout"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
-                  </ul>
-              </div>
-          @else
-              <div class="ms-2">
-                  <a href="/auth/dangnhap" class="btn btn-dark btn-sm rounded-0 px-3 fw-bold">
-                      Đăng nhập
-                  </a>
-              </div>
-          @endif
-  
         </div>
-      </div>
     </div>
 </nav>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

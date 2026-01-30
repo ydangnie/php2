@@ -191,6 +191,6 @@
 
   <?php echo $__env->make('layout.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
 </body>
 </html><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/view/trangchu.blade.php ENDPATH**/ ?>

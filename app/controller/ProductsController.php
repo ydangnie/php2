@@ -38,7 +38,7 @@ class ProductsController extends Controller
         if (isset($tukhoa)) {
             $data['tukhoa'] = $tukhoa;
         }
-        $this->view('products/index', [
+        $this->view('admin/products/index', [
             'products' => $products,
             'tukhoa' => $tukhoa,
             'totalPages' => $totalPages,
@@ -52,7 +52,7 @@ class ProductsController extends Controller
 
         $danhmuc = $this->DanhMucModel->all();
         $thuonghieu = $this->ThuongHieuModel->all();
-        $this->view('products/add', ['danhmuc' => $danhmuc, 'thuonghieu' => $thuonghieu]);
+        $this->view('admin/products/add', ['danhmuc' => $danhmuc, 'thuonghieu' => $thuonghieu]);
     }
 
     public function them()
@@ -82,7 +82,7 @@ class ProductsController extends Controller
             ]);
 
             $_SESSION['thongbao'] = "Thêm sản phẩm thành công";
-            $this->redirect('http://localhost:8000/products/index');
+            $this->redirect('http://localhost:8000/admin/products/index');
         }
     }
     public function edit($id)
@@ -90,7 +90,7 @@ class ProductsController extends Controller
         $product = $this->productModel->find($id);
         $alldanhmuc = $this->DanhMucModel->all();
         $allthuonghieu = $this->ThuongHieuModel->all();
-        $this->view('products/edit', ['product' => $product, 'danhmuc' => $alldanhmuc, 'thuonghieu' => $allthuonghieu]);
+        $this->view('admin/products/edit', ['product' => $product, 'danhmuc' => $alldanhmuc, 'thuonghieu' => $allthuonghieu]);
     }
 
     public function update_product($id)
