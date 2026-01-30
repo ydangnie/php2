@@ -38,7 +38,6 @@ class ThuongHieuController extends Controller {
 
     public function edit($id) {
         $thuonghieu = $this->ThuongHieuModel->find($id);
-        // Sửa 'product' thành 'products'
         $this->view('thuonghieu/edit', ['thuonghieu' => $thuonghieu]); 
     }
 
@@ -59,7 +58,6 @@ class ThuongHieuController extends Controller {
 
 
             $this->ThuongHieuModel->update(['tenthuonghieu' => $tenthuonghieu, 'img' => $img], $id);
-            // Sửa đường dẫn redirect
             $this->redirect('http://localhost:8000/thuonghieu/index');
         }
     }

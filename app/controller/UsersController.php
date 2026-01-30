@@ -101,15 +101,8 @@ class UsersController extends Controller
     {
         $users = $this->UsersModel->find($id);
         $this->UsersModel->delete($id);
-        // Sửa đường dẫn redirect
-        if ($users) {
-            if (!empty($users['img'])) {
-                $hinhanhxoa = 'uploads/' . $users['img'];
-                if (file_exists($hinhanhxoa)) {
-                    unlink($hinhanhxoa);
-                }
-            }
-        }
+    
+        
 
         $this->redirect('http://localhost:8000/users/index');
     }

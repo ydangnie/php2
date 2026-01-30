@@ -102,7 +102,7 @@
 
 <body class="bg-white d-flex flex-column min-vh-100">
 
-  @include('layout.nav')
+  <?php echo $__env->make('layout.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
   <header class="hero-banner text-center d-flex align-items-center">
     <div class="container position-relative z-1">
@@ -133,25 +133,25 @@
       </div>
 
       <div class="row g-4">
-        @if(isset($products) && count($products) > 0)
-            @foreach($products as $product)
+        <?php if(isset($products) && count($products) > 0): ?>
+            <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="col-12 col-sm-6 col-lg-3">
                 <div class="card h-100 product-card border-0">
                     <div class="product-img-container position-relative">
-                        @if(!empty($product['img']))
-                            <img src="/uploads/{{ $product['img'] }}" alt="{{ $product['name'] }}">
-                        @else
+                        <?php if(!empty($product['img'])): ?>
+                            <img src="/uploads/<?php echo e($product['img']); ?>" alt="<?php echo e($product['name']); ?>">
+                        <?php else: ?>
                             <div class="d-flex align-items-center justify-content-center h-100 text-muted bg-light">
                                 <i class="fas fa-image fa-2x"></i>
                             </div>
-                        @endif
+                        <?php endif; ?>
                         
                         </div>
 
                     <div class="card-body text-center pt-4">
-                        <div class="text-muted small mb-1 text-uppercase">{{ $product['tendanhmuc'] ?? 'Fashion' }}</div>
-                        <h5 class="card-title fw-bold text-truncate px-2">{{ $product['name'] }}</h5>
-                        <p class="price-tag text-dark mb-3">{{ number_format($product['price']) }} VNĐ</p>
+                        <div class="text-muted small mb-1 text-uppercase"><?php echo e($product['tendanhmuc'] ?? 'FASHION'); ?></div>
+                        <h5 class="card-title fw-bold text-truncate px-2"><?php echo e($product['name']); ?></h5>
+                        <p class="price-tag text-dark mb-3"><?php echo e(number_format($product['price'])); ?> VNĐ</p>
                         
                         <div class="d-grid gap-2">
                             <a href="#" class="btn btn-outline-dark rounded-0 btn-sm">
@@ -161,12 +161,12 @@
                     </div>
                 </div>
             </div>
-            @endforeach
-        @else
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <?php else: ?>
             <div class="col-12 text-center py-5">
                 <p class="text-muted">Chưa có sản phẩm nào được cập nhật.</p>
             </div>
-        @endif
+        <?php endif; ?>
       </div>
 
       <div class="row mt-5 pt-4">
@@ -189,8 +189,8 @@
     </div>
   </main>
 
-  @include('layout.footer')
+  <?php echo $__env->make('layout.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/view/trangchu.blade.php ENDPATH**/ ?>

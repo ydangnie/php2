@@ -15,7 +15,7 @@
               Admin
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="../../products/index">Sản phẩm</a></li>
+              <li><a class="dropdown-item" href="<?php echo e(route('products.index')); ?>">Sản phẩm</a></li>
               <li><a class="dropdown-item" href="/danhmuc/index">Danh mục</a></li>
               <li><a class="dropdown-item" href="/thuonghieu/index">Thương hiệu</a></li>
               <li><a class="dropdown-item" href="/tintuc/index">Tin tức</a></li>
@@ -44,11 +44,12 @@
               </span>
           </a>
   
-          @if(isset($_SESSION['login']))
+          <?php if(isset($_SESSION['login'])): ?>
               <div class="dropdown ms-2">
                   <a class="text-dark text-decoration-none dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown">
                       <i class="fas fa-user-circle me-1"></i> 
-                      {{ $_SESSION['login']['ten'] ?? 'Member' }}
+                      <?php echo e($_SESSION['login']['ten'] ?? 'Member'); ?>
+
                   
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end rounded-0 mt-2 shadow-sm">
@@ -58,15 +59,15 @@
                       <li><a class="dropdown-item text-danger" href="/auth/logout"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
                   </ul>
               </div>
-          @else
+          <?php else: ?>
               <div class="ms-2">
                   <a href="/auth/dangnhap" class="btn btn-dark btn-sm rounded-0 px-3 fw-bold">
                       Đăng nhập
                   </a>
               </div>
-          @endif
+          <?php endif; ?>
   
         </div>
       </div>
     </div>
-</nav>
+</nav><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/layout/nav.blade.php ENDPATH**/ ?>

@@ -17,7 +17,6 @@
     <?php unset($_SESSION['thongbao']) ?>
 <?php endif; ?>
 
-
 <form action="/products/index" method="GET" style="margin-bottom: 20px;">
     <input type="text" name="tukhoa"
         placeholder="Nhập Tên sản phẩm"
@@ -76,4 +75,4 @@
             <?= $i ?>
         </a>
     <?php endfor; ?>
-</div>
+</div><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/products/index.blade.php ENDPATH**/ ?>

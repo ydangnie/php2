@@ -23,5 +23,7 @@
     <br>
     <label>Ảnh:</label>
     <input type="file" name="img"><br>
+    <label for="">Số lượng</label>
+    <input type="number" name="soluong">
     <button type="submit">Lưu</button>
 </form>

@@ -58,9 +58,9 @@ class AuthController extends Controller
                 if($nguoidung['role'] === 'admin' ){
                    
                     echo "Đăng nhập thành công";
-                $this->redirect('http://localhost:8000/products/index'); 
+                $this->redirect('http://localhost:8000/products/trangchu'); 
                 }else{
-                    $this->redirect('http://localhost:8000/home/index'); 
+                    $this->redirect('http://localhost:8000/home/trangchu'); 
                 }
 
 
