@@ -6,7 +6,7 @@ class ProductModel extends Model
 
     public function all()
     {
-        $sql = "SELECT * FROM $this->table";
+        $sql = "SELECT * FROM $this->table ";
         $conn = $this->connect(); // Sử dụng hàm connect từ class cha Model
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -39,7 +39,8 @@ class ProductModel extends Model
 
     public function update($data, $id)
     {
-        $sql = "UPDATE $this->table SET name = :name, price = :price, mota = :mota, img = :img WHERE id = :id";
+        $sql = "UPDATE $this->table SET name = :name, price = :price, mota = :mota, img = :img, 
+        danhmuc_id = :danhmuc_id, thuonghieu_id = :thuonghieu_id WHERE id = :id";
         $conn = $this->connect();
         $stmt = $conn->prepare($sql);
         return $stmt->execute([
@@ -47,6 +48,8 @@ class ProductModel extends Model
             'price' => $data['price'],
             'mota' => $data['mota'],
             'img' => $data['img'],
+            'danhmuc_id' => $data['danhmuc_id'],
+            'thuonghieu_id' => $data['thuonghieu_id'],
             'id' => $id
         ]);
     }

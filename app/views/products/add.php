@@ -16,12 +16,10 @@
 
 
     <Label>Thương hiệu</Label>
-
-    <select name="thuonghieu_id" id="">
-        <?php foreach ($thuonghieu as $th): ?>
-            <option value="<?= $th['id'] ?>"><?= $dm['tendanhmuc'] ?></option>
-        <?php endforeach; ?>
-    </select>
+<select name="thuonghieu_id">
+    <?php foreach ($thuonghieu as $th): ?>
+        <option value="<?= $th['id'] ?>"><?= $dm['tendanhmuc'] ?></option> <?php endforeach; ?>
+</select>
     <br>
     <label>Ảnh:</label>
     <input type="file" name="img"><br>

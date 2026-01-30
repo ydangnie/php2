@@ -86,9 +86,9 @@ class ProductsController extends Controller
     public function edit($id)
     {
         $product = $this->productModel->find($id);
-        $danhmuc_id = $this->DanhMucModel->find($id);
-        $thuonghieu_id = $this->ThuongHieuModel->find($id);
-        $this->view('products/edit', ['product' => $product, 'danhmuc_id' => $danhmuc_id, 'thuonghieu_id' => $thuonghieu_id]);
+        $alldanhmuc = $this->DanhMucModel->all();
+        $allthuonghieu = $this->ThuongHieuModel->all();
+        $this->view('products/edit', ['product' => $product, 'danhmuc' => $alldanhmuc, 'thuonghieu' => $allthuonghieu]);
     }
 
     public function update_product($id)
@@ -101,7 +101,8 @@ class ProductsController extends Controller
             $danhmuc_id = $_POST['danhmuc_id'];
             $thuonghieu_id = $_POST['thuonghieu_id'];
 
-            if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
+            
+           if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
                 $img =  $_FILES['img']['name'];
                 $thumuc = "uploads/";
                 $thumucluu = $thumuc . basename($img);
