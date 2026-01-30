@@ -19,5 +19,7 @@
         <?php endforeach; ?>
     </select>
     <br>
+    <label>Số lượng</label>
+    <input type="number" name="soluong" value="<?= $product['soluong'] ?>" required><br>
     <button type="submit">Cập nhật</button>
 </form>

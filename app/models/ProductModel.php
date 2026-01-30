@@ -33,14 +33,15 @@ class ProductModel extends Model
             'mota' => $data['mota'],
             'img' => $data['img'],
             'danhmuc_id' => $data['danhmuc_id'],
-            'thuonghieu_id' => $data['thuonghieu_id']
+            'thuonghieu_id' => $data['thuonghieu_id'],
+            'soluong' => $data['soluong']
         ]);
     }
 
     public function update($data, $id)
     {
         $sql = "UPDATE $this->table SET name = :name, price = :price, mota = :mota, img = :img, 
-        danhmuc_id = :danhmuc_id, thuonghieu_id = :thuonghieu_id WHERE id = :id";
+        danhmuc_id = :danhmuc_id, thuonghieu_id = :thuonghieu_id , soluong  = :soluong WHERE id = :id";
         $conn = $this->connect();
         $stmt = $conn->prepare($sql);
         return $stmt->execute([
@@ -50,6 +51,7 @@ class ProductModel extends Model
             'img' => $data['img'],
             'danhmuc_id' => $data['danhmuc_id'],
             'thuonghieu_id' => $data['thuonghieu_id'],
+            'soluong' => $data['soluong'],
             'id' => $id
         ]);
     }

@@ -34,6 +34,7 @@
         <th>Mô tả</th>
         <th>Danh mục</th>
         <th>Thương hiệu</th>
+        <th>Số lượng</th>
         <th>Hành động</th>
     </tr>
     <?php if (empty($products)): ?>
@@ -53,7 +54,7 @@
 
                 <td><?= $product['tenthuonghieu'] ?? 'Chưa phân loại' ?>
                 </td>
-
+<td><?= $product['soluong'] ?></td>
                 <td>
                     <a href="/products/edit/<?= $product['id'] ?>">Sửa</a> |
                     <a href="/products/delete/<?= $product['id'] ?>" onclick="return confirm('Xóa hả?')">Xóa</a>

@@ -63,6 +63,7 @@ class ProductsController extends Controller
             $mota = $_POST['mota'];
             $danhmuc_id = $_POST['danhmuc_id'];
             $thuonghieu_id = $_POST['thuonghieu_id'];
+            $soluong = $_POST['soluong'];
 
             if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
                 $img =  $_FILES['img']['name'];
@@ -76,7 +77,8 @@ class ProductsController extends Controller
                 'mota' => $mota,
                 'img' => $img,
                 'danhmuc_id' => $danhmuc_id,
-                'thuonghieu_id' => $thuonghieu_id
+                'thuonghieu_id' => $thuonghieu_id,
+                'soluong' => $soluong
             ]);
 
             $_SESSION['thongbao'] = "Thêm sản phẩm thành công";
@@ -100,6 +102,8 @@ class ProductsController extends Controller
             $img = "";
             $danhmuc_id = $_POST['danhmuc_id'];
             $thuonghieu_id = $_POST['thuonghieu_id'];
+            $soluong = $_POST['soluong'];
+
 
             
            if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
@@ -114,7 +118,8 @@ class ProductsController extends Controller
                 'mota' => $mota,
                 'img' => $img,
                 'danhmuc_id' => $danhmuc_id,
-                'thuonghieu_id' => $thuonghieu_id
+                'thuonghieu_id' => $thuonghieu_id,
+                'soluong' => $soluong
             ], $id);
             $_SESSION['thongbao'] = "Cập nhật sản phẩm thành công";
             $this->redirect('http://localhost:8000/products/index');
