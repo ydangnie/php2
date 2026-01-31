@@ -10,7 +10,7 @@ class DanhMucController extends Controller {
     public function index() {
         $danhmuc = $this->DanhMucModel->all();
         // Sửa 'product' thành 'products'
-        $this->view('danhmuc/index', ['danhmuc' => $danhmuc]); 
+        $this->view('admin/danhmuc/index', ['danhmuc' => $danhmuc]); 
     }
 
     public function them() {

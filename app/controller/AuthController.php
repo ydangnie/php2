@@ -60,7 +60,7 @@ class AuthController extends Controller
                     echo "Đăng nhập thành công";
                 $this->redirect('http://localhost:8000/products/trangchu'); 
                 }else{
-                    $this->redirect('http://localhost:8000/home/trangchu'); 
+                    $this->redirect('http://localhost:8000/view/trangchu'); 
                 }
 
 

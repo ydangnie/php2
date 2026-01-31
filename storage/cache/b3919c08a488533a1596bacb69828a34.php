@@ -123,7 +123,7 @@
 
 <nav id="unique-master-header" class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="/view/trangchu">
             <img src="https://theme.hstatic.net/1000306633/1001194548/14/logo.png?v=491" alt="Logo">
         </a>
 
@@ -133,7 +133,7 @@
 
         <div id="uniqueNavbarCollapse" class="collapse navbar-collapse">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link umh-link active" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link umh-link active" href="/view/trangchu">Home</a></li>
                 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle umh-link" href="#" role="button" data-bs-toggle="dropdown">Quản Lý</a>
