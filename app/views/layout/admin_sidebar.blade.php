@@ -44,6 +44,13 @@
                 Người dùng
             </a>
         </li>
+        <li>
+            <a href="/magiamgia/index" class="nav-link text-white {{ strpos($_SERVER['REQUEST_URI'], 'magiamgia') !== false ? 'active bg-primary' : '' }}">
+                <i class="fas fa-percentage me-2" style="width: 20px;"></i>
+                Mã giảm giá
+            </a>
+        </li>
+        </li>
     </ul>
     <hr>
     <div class="dropdown">

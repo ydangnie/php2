@@ -1,34 +1,41 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-class AuthController extends Controller {
-    private $userModel;
+use Google\Client as Google_Client;
+use Google\Service\Oauth2 as Google_Service_Oauth2;
+class AuthController extends Controller
+{
+    private $AuthModel;
 
-    public function __construct() {
-        $this->userModel = $this->model('UsersModel');
+    public function __construct()
+    {
+        $this->AuthModel = $this->model('AuthModel');
     }
 
     // Trang đăng nhập
-    public function login() {
-        if (isset($_SESSION['user'])) {
+    public function login()
+    {
+        if (isset($_SESSION['users'])) {
             $this->redirect('/');
         }
         $this->view('auth.login'); // Tạo file view/auth/login.blade.php
     }
 
     // Xử lý đăng nhập
-    public function ktra() {
+    public function ktra()
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-           
+
             $email = $_POST['email'];
             $matkhau = $_POST['matkhau'];
-            
-            $user = $this->userModel->timnguoidung($email);
-            
-         
+
+            $user = $this->AuthModel->timnguoidung($email);
+
+
             if ($user && password_verify($matkhau, $user['matkhau'])) {
-                $_SESSION['user'] = $user;
+                $_SESSION['users'] = $user;
                 if ($user['role'] == 'admin') {
                     $this->redirect('/admin/dashboard');
                 } else {
@@ -42,42 +49,46 @@ class AuthController extends Controller {
     }
 
     // Đăng ký
-    public function register() {
+    public function register()
+    {
         $this->view('auth.register');
     }
 
-    public function luu() {
+    public function luu()
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        
+
             $email = $_POST['email'];
             $ten = $_POST['ten'];
             $matkhau = password_hash($_POST['matkhau'], PASSWORD_DEFAULT); // Mã hóa pass
-            
+
             // Kiểm tra trùng tên
-            if ($this->userModel->timnguoidung($email)) {
+            if ($this->AuthModel->timnguoidung($email)) {
                 $_SESSION['error'] = "Tên tài khoản đã tồn tại!";
                 $this->redirect('/auth/register');
                 return;
             }
 
-            $this->userModel->create([
+            $this->AuthModel->create([
                 'email' => $email,
                 'ten' => $ten,
                 'matkhau' => $matkhau,
                 'role' => 'nguoidung'
             ]);
-            
+
             $_SESSION['success'] = "Đăng ký thành công! Hãy đăng nhập.";
             $this->redirect('/auth/login');
         }
     }
 
     // Quên mật khẩu (Gửi OTP)
-    public function forgotPassword() {
+    public function forgot()
+    {
         $this->view('auth.forgot');
     }
 
-    public function sendOtp() {
+    public function gui_otp()
+    {
         if (isset($_POST['email'])) { // Giả sử bảng login có cột email, nếu chưa có bạn phải thêm vào DB
             $email = $_POST['email'];
             $otp = rand(100000, 999999);
@@ -103,16 +114,124 @@ class AuthController extends Controller {
 
                 $mail->send();
                 $_SESSION['success'] = "Đã gửi OTP qua email.";
-                $this->view('auth.verify_otp');
+                $this->view('auth.xacnhan');
             } catch (Exception $e) {
                 echo "Lỗi gửi mail: {$mail->ErrorInfo}";
             }
         }
     }
+    public function xacnhan()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $otp_input = $_POST['otp'];
+            if (isset($_SESSION['otp']) && $otp_input == $_SESSION['otp']) {
+                $this->view('auth.nhapmk');
+            } else {
+                echo "Nhập sai OTP";
+                $this->view('auth.forgot');
+            }
+        }
+    }
 
-    public function logout() {
+
+    public function nhapmk()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $matkhaumoi = $_POST['matkhaumoi'];
+            $email = $_SESSION['reset_email'];
+
+
+
+            $mahoa = password_hash($matkhaumoi, PASSWORD_DEFAULT);
+            $this->AuthModel->nhapmk($email, $mahoa);
+
+            unset($_SESSION['otp']);
+            unset($_SESSION['reset_email']);
+
+
+            $_SESSION['success'] = "Đổi mật khẩu thành công. Vui lòng đăng nhập!";
+            $this->redirect('/auth/login');
+        }
+    }
+    public function logout()
+    {
         unset($_SESSION['user']);
         session_destroy();
         $this->redirect('/');
+    }
+    public function dnhapgoogle() {
+        $client = new Google_Client();
+        
+        // Lấy cấu hình từ file .env
+        $client->setClientId($_ENV['GOOGLE_CLIENT_ID']);
+        $client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']);
+        
+        // Đường dẫn này phải trùng KHỚP 100% trong Google Cloud Console
+        $client->setRedirectUri('http://localhost/auth/googleCallback'); 
+        
+        $client->addScope("email");
+        $client->addScope("profile");
+
+        $loginUrl = $client->createAuthUrl();
+        header("Location: " . $loginUrl);
+        exit;
+    }
+    public function googleCallback() {
+        $client = new Google_Client();
+        $client->setClientId($_ENV['GOOGLE_CLIENT_ID']);
+        $client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']);
+        $client->setRedirectUri('http://localhost/auth/googleCallback');
+
+        if (isset($_GET['code'])) {
+            try {
+                // Đổi mã code lấy Token
+                $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+                
+                if (!isset($token['error'])) {
+                    $client->setAccessToken($token['access_token']);
+
+                    // Lấy thông tin người dùng từ Google
+                    $google_oauth = new Google_Service_Oauth2($client);
+                    $google_account_info = $google_oauth->userinfo->get();
+                    
+                    $email = $google_account_info->email;
+                    $name = $google_account_info->name;
+                    $google_id = $google_account_info->id;
+
+                    // Gọi Model: Kiểm tra user đã tồn tại chưa
+                    $user = $this->AuthModel->checkGoogleUser($email);
+
+                    if ($user) {
+                        // A. Đã tồn tại -> Lưu session đăng nhập luôn
+                        $_SESSION['user'] = $user;
+                        
+                        // Cập nhật lại google_id vào DB nếu trước đó chưa có (trường hợp user cũ giờ mới link GG)
+                        // (Bạn có thể viết thêm hàm update nếu cần, nhưng tạm thời login được là ổn)
+                    } else {
+                        // B. Chưa tồn tại -> Tạo user mới
+                        $this->AuthModel->createGoogleUser($email, $name, $google_id);
+                        
+                        // Lấy lại thông tin vừa tạo để lưu session
+                        $newUser = $this->AuthModel->checkGoogleUser($email);
+                        $_SESSION['user'] = $newUser;
+                    }
+
+                    // Chuyển hướng về trang chủ hoặc Dashboard
+                    if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] == 'admin') {
+                         $this->redirect('/admin/dashboard');
+                    } else {
+                         $this->redirect('/');
+                    }
+                    exit;
+                }
+            } catch (Exception $e) {
+                // Xử lý lỗi nếu kết nối Google thất bại
+                $_SESSION['error'] = "Lỗi đăng nhập Google: " . $e->getMessage();
+                $this->redirect('/auth/login');
+            }
+        }
+        
+        // Nếu không có code hoặc lỗi
+        $this->redirect('/auth/login');
     }
 }

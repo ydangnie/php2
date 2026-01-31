@@ -20,5 +20,13 @@ class ViewController extends Controller {
 
         $this->view('view.trangchu', ['products' => $products, 'danhmuc' => $danhmuc]);
     }
+    public function cart()
+    {
+   $danhmuc = $this->DanhMucModel->all(); 
+
+        $products = $this->productModel->all(); 
+
+        $this->view('view.cart', ['products' => $products, 'danhmuc' => $danhmuc]);
+    }
 }
 ?>

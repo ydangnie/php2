@@ -1,42 +1,35 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - MyShop</title>
+    <title>Quên mật khẩu - MyShop</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    
     <style>
         body {
-
+    
             background-color: #fff;
         }
-
         .auth-container {
             max-width: 450px;
             width: 100%;
             padding: 40px;
             /* Border mỏng tinh tế */
-            border: 1px solid #eee;
+            border: 1px solid #eee; 
         }
-
         .form-control {
-            border-radius: 0;
-            /* Vuông góc */
+            border-radius: 0; /* Vuông góc */
             padding: 12px 15px;
             border: 1px solid #ddd;
             background-color: #fafafa;
         }
-
         .form-control:focus {
             box-shadow: none;
-            border-color: #000;
-            /* Border đen khi click vào */
+            border-color: #000; /* Border đen khi click vào */
             background-color: #fff;
         }
-
         .btn-dark-custom {
             background-color: #000;
             color: #fff;
@@ -48,91 +41,65 @@
             text-transform: uppercase;
             transition: all 0.3s;
         }
-
         .btn-dark-custom:hover {
             background-color: #fff;
             color: #000;
         }
-
         .auth-title {
             font-weight: 800;
             letter-spacing: -1px;
             margin-bottom: 0.5rem;
         }
-
         .auth-subtitle {
             color: #666;
             font-size: 0.9rem;
             margin-bottom: 2rem;
         }
-
         .link-custom {
             color: #000;
             text-decoration: underline;
             font-weight: 600;
         }
-
         .link-custom:hover {
             color: #555;
         }
     </style>
 </head>
-
 <body class="d-flex flex-column min-vh-100">
-
-    @include('layout.nav')
+    
+    <?php echo $__env->make('layout.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
         <div class="auth-container shadow-sm">
             <div class="text-center">
-                <h2 class="auth-title text-uppercase">Đăng Nhập</h2>
-                <p class="auth-subtitle">Chào mừng trở lại. Vui lòng nhập thông tin.</p>
+                <h2 class="auth-title text-uppercase">Quên mật khẩu</h2>
+                <p class="auth-subtitle">Vui lòng nhập email để nhận hướng dẫn khôi phục mật khẩu.</p>
             </div>
 
-            <form action="/auth/ktra" method="POST">
+            <form action="/auth/gui_otp" method="POST">
                 <div class="mb-3">
                     <label for="email" class="form-label small fw-bold text-uppercase">Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
                 </div>
 
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between">
-                        <label for="password" class="form-label small fw-bold text-uppercase">Mật khẩu</label>
-                        <a href="/auth/forgot" class="text-muted small text-decoration-none">Quên mật khẩu?</a>
-                    </div>
-                    <input type="password" class="form-control" id="password" name="matkhau" placeholder="••••••••"
-                        required>
-                </div>
-
                 <div class="d-grid mb-4">
                     <button type="submit" class="btn btn-dark-custom">
-                        Đăng Nhập
+                        Gửi yêu cầu
                     </button>
-                </div>
-                <div class="text-center text-muted small mb-3" style="position: relative;">
-                    <span style="background: #fff; padding: 0 10px; position: relative; z-index: 1;">HOẶC</span>
-                    <hr
-                        style="position: absolute; top: 50%; left: 0; right: 0; margin: 0; z-index: 0; border-top: 1px solid #ddd;">
-                </div>
-
-                <div class="d-grid mb-4">
-                    <a href="/auth/dnhapgoogle" class="btn btn-outline-danger text-uppercase"
-                        style="border-radius: 0; padding: 12px; font-weight: 700;">
-                        <i class="fab fa-google me-2"></i> Đăng Nhập bằng Google
-                    </a>
                 </div>
 
                 <div class="text-center small">
-                    Chưa có tài khoản?
+                    <a href="/auth/login" class="link-custom">Quay lại đăng nhập</a> 
+                    <br>
+                    Chưa có tài khoản? 
                     <a href="/auth/register" class="link-custom">Đăng ký ngay</a>
                 </div>
             </form>
         </div>
     </main>
 
-    @include('layout.footer')
+    <?php echo $__env->make('layout.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
-</html>
+</html><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/auth/forgot.blade.php ENDPATH**/ ?>

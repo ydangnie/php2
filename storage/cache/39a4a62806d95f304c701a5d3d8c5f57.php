@@ -154,7 +154,7 @@
                         <p class="price-tag text-dark mb-3"><?php echo e(number_format($product['price'])); ?> VNĐ</p>
                         
                         <div class="d-grid gap-2">
-                            <a href="#" class="btn btn-outline-dark rounded-0 btn-sm">
+                            <a href="/cart/add/<?php echo e($product['id']); ?>" class="btn btn-outline-dark rounded-0 btn-sm">
                                 <i class="fas fa-shopping-bag me-1"></i> Thêm vào giỏ
                             </a>
                         </div>

@@ -143,6 +143,7 @@
                         <li><a class="dropdown-item" href="/thuonghieu/index"><i class="fas fa-tag me-2 text-muted"></i>Thương hiệu</a></li>
                         <li><a class="dropdown-item" href="/tintuc/index"><i class="fas fa-newspaper me-2 text-muted"></i>Tin tức</a></li>
                         <li><a class="dropdown-item" href="/users/index"><i class="fas fa-users me-2 text-muted"></i>Người dùng</a></li>
+                        <li><a class="dropdown-item" href="/magiamgia/index"><i class="fas fa-ticket-alt me-2 text-muted"></i>Mã giảm giá</a></li>
                     </ul>
                 </li>
             </ul>
@@ -155,16 +156,16 @@
                     </div>
                 </form>
 
-                <a href="/cart" class="umh-icon-action text-decoration-none" title="Giỏ hàng">
+                <a href="view/cart" class="umh-icon-action text-decoration-none" title="Giỏ hàng">
                     <i class="fas fa-shopping-bag"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" style="font-size: 0.6rem;">0</span>
                 </a>
 
-                @if(isset($_SESSION['login']))
+                @if(isset($_SESSION['users']))
                     <div class="dropdown">
                         <a class="text-dark text-decoration-none dropdown-toggle d-flex align-items-center gap-2 fw-bold" href="#" role="button" data-bs-toggle="dropdown">
                             <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                {{ strtoupper(substr($_SESSION['login']['ten'] ?? 'M', 0, 1)) }}
+                                {{ strtoupper(substr($_SESSION['users']['ten'] ?? 'M', 0, 1)) }}
                             </div>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end mt-2">

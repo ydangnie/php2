@@ -46,4 +46,5 @@ class Router
         http_response_code(404);
         echo "<h1 style ='color:red;'>404 Not Found: $message</h1>";
     }
+    
 }

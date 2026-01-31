@@ -61,5 +61,40 @@ class AuthModel extends Model {
         $stmt = $conn->prepare($sql);
         return $stmt->execute(['role' => $role]);
     }
+    public function nhapmk($email, $matkhaumoi)
+    {
+       $sql = "UPDATE $this->table SET matkhau = :matkhau WHERE email = :email";
+        $conn = $this->connect();
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute([
+           'email' => $email,
+        'matkhau' => $matkhaumoi
+         
+        ]);
+    }
+    public function checkGoogleUser($email) {
+        // Tìm user theo email
+        $sql = "SELECT * FROM $this->table WHERE email = :email";
+        $conn = $this->connect();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // 2. Tạo user mới nếu họ lần đầu đăng nhập bằng Google
+    public function createGoogleUser($email, $name, $google_id) {
+        // Lưu ý: Password để trống hoặc random chuỗi vì họ dùng GG để login
+        // Role mặc định là 'nguoidung' (hoặc 0 tùy quy ước DB của bạn)
+        $sql = "INSERT INTO $this->table (ten, email, google_id, role, matkhau) VALUES (:ten, :email, :google_id, :role, :matkhau)";
+        $conn = $this->connect();
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute([
+            'ten' => $name,
+            'email' => $email,
+            'google_id' => $google_id,
+            'role' => 'nguoidung', 
+            'matkhau' => '' // Không cần mật khẩu
+        ]);
+    }
    
 }

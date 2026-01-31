@@ -106,7 +106,7 @@
                                      
                                      
                                         <td class="text-center">
-                                            <a href="/thuonghieu/edit/<?= $user['id'] ?>" class="btn btn-sm btn-outline-primary border-0" title="Sửa">
+                                            <a href="/users/edit/<?= $user['id'] ?>" class="btn btn-sm btn-outline-primary border-0" title="Sửa">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <a href="/users/delete/<?= $user['id'] ?>" onclick="return confirm('Bạn có chắc muốn xóa người dùng này?')" class="btn btn-sm btn-outline-danger border-0" title="Xóa">

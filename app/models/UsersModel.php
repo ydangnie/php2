@@ -24,10 +24,11 @@ class UsersModel extends Model
 
     public function create($data)
     {
-        $sql = "INSERT INTO $this->table (ten, matkhau, role) VALUES (:ten, :matkhau, :role)";
+        $sql = "INSERT INTO $this->table (email, ten, matkhau, role) VALUES (:email, :ten, :matkhau, :role)";
         $conn = $this->connect();
         $stmt = $conn->prepare($sql);
         return $stmt->execute([
+            'email' => $data['email'],
             'ten' => $data['ten'],
             'matkhau' => $data['matkhau'],
             'role' => $data['role']
@@ -93,4 +94,5 @@ class UsersModel extends Model
         $stmt->execute(['tukhoa' => $search]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+     
 }
