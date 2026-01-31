@@ -8,6 +8,7 @@ class ProductsController extends Controller
 
     public function __construct()
     {
+        
         $this->DanhMucModel = $this->model('DanhMucModel');
         $this->ThuongHieuModel = $this->model('ThuongHieuModel');
         $this->productModel = $this->model('ProductModel');
