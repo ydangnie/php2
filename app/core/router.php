@@ -14,8 +14,8 @@ class Router
         $segments = $path === '' ? [] : explode('/', $path);
         
         // Mặc định là HomeController và action index
-        $controllerName = ucfirst($segments[0] ?? 'home') . 'Controller';
-        $action = $segments[1] ?? 'index';
+        $controllerName = ucfirst($segments[0] ?? 'View') . 'Controller';
+        $action = $segments[1] ?? 'trangchu';
         $params = array_slice($segments, 2);
 
         // Sửa logic: Nếu class KHÔNG tồn tại thì báo lỗi

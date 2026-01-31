@@ -73,15 +73,16 @@
             </div>
 
             <form action="/auth/luu" method="POST">
+                 <div class="mb-3">
+                    <label for="email" class="form-label small fw-bold text-uppercase">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                </div>
                 <div class="mb-3">
                     <label for="fullname" class="form-label small fw-bold text-uppercase">Họ và tên</label>
-                    <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Nguyễn Văn A" required>
+                    <input type="text" class="form-control" id="fullname" name="ten" placeholder="Nguyễn Văn A" required>
                 </div>
 
-                <div class="mb-3">
-                    <label for="email" class="form-label small fw-bold text-uppercase">Tên đăng nhập</label>
-                    <input type="email" class="form-control" id="email" name="ten" placeholder="name@example.com" required>
-                </div>
+               
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -109,7 +110,7 @@
 
                 <div class="text-center small">
                     Đã có tài khoản? 
-                    <a href="/auth/dangnhap" class="link-custom">Đăng nhập</a>
+                    <a href="/auth/login" class="link-custom">Đăng nhập</a>
                 </div>
             </form>
         </div>

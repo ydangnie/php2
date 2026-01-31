@@ -3,31 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - MyShop</title>
+    <title>Đăng ký - MyShop</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         body {
-    
+            
             background-color: #fff;
         }
         .auth-container {
-            max-width: 450px;
+            max-width: 500px; /* Rộng hơn form login một chút */
             width: 100%;
             padding: 40px;
-            /* Border mỏng tinh tế */
-            border: 1px solid #eee; 
+            border: 1px solid #eee;
         }
         .form-control {
-            border-radius: 0; /* Vuông góc */
+            border-radius: 0;
             padding: 12px 15px;
             border: 1px solid #ddd;
             background-color: #fafafa;
         }
         .form-control:focus {
             box-shadow: none;
-            border-color: #000; /* Border đen khi click vào */
+            border-color: #000;
             background-color: #fff;
         }
         .btn-dark-custom {
@@ -60,52 +59,65 @@
             text-decoration: underline;
             font-weight: 600;
         }
-        .link-custom:hover {
-            color: #555;
-        }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
     
-    @include('layout.nav')
+    <?php echo $__env->make('layout.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
         <div class="auth-container shadow-sm">
             <div class="text-center">
-                <h2 class="auth-title text-uppercase">Đăng Nhập</h2>
-                <p class="auth-subtitle">Chào mừng trở lại. Vui lòng nhập thông tin.</p>
+                <h2 class="auth-title text-uppercase">Tạo Tài Khoản</h2>
+                <p class="auth-subtitle">Trở thành thành viên để nhận ưu đãi độc quyền.</p>
             </div>
 
-            <form action="/auth/ktra" method="POST">
-                <div class="mb-3">
+            <form action="/auth/luu" method="POST">
+                 <div class="mb-3">
                     <label for="email" class="form-label small fw-bold text-uppercase">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
                 </div>
+                <div class="mb-3">
+                    <label for="fullname" class="form-label small fw-bold text-uppercase">Họ và tên</label>
+                    <input type="text" class="form-control" id="fullname" name="ten" placeholder="Nguyễn Văn A" required>
+                </div>
+
+               
                 
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
                         <label for="password" class="form-label small fw-bold text-uppercase">Mật khẩu</label>
-                        <a href="#" class="text-muted small text-decoration-none">Quên mật khẩu?</a>
+                        <input type="password" class="form-control" id="password" name="matkhau" placeholder="••••••••" required>
                     </div>
-                    <input type="password" class="form-control" id="password" name="matkhau" placeholder="••••••••" required>
+                    <div class="col-md-6 mb-4">
+                        <label for="confirm_password" class="form-label small fw-bold text-uppercase">Nhập lại</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input class="form-check-input rounded-0" type="checkbox" id="terms" required>
+                    <label class="form-check-label small text-muted" for="terms">
+                        Tôi đồng ý với <a href="#" class="text-dark text-decoration-underline">Điều khoản dịch vụ</a> và <a href="#" class="text-dark text-decoration-underline">Chính sách bảo mật</a>
+                    </label>
                 </div>
 
                 <div class="d-grid mb-4">
                     <button type="submit" class="btn btn-dark-custom">
-                        Đăng Nhập
+                        Đăng Ký
                     </button>
                 </div>
 
                 <div class="text-center small">
-                    Chưa có tài khoản? 
-                    <a href="/auth/register" class="link-custom">Đăng ký ngay</a>
+                    Đã có tài khoản? 
+                    <a href="/auth/login" class="link-custom">Đăng nhập</a>
                 </div>
             </form>
         </div>
     </main>
 
-    @include('layout.footer')
+    <?php echo $__env->make('layout.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/auth/register.blade.php ENDPATH**/ ?>

@@ -2,6 +2,7 @@
 
 class ThuongHieuController extends Controller {
     private $ThuongHieuModel;
+    
 
     public function __construct() {
         $this->ThuongHieuModel = $this->model('ThuongHieuModel');
@@ -9,13 +10,41 @@ class ThuongHieuController extends Controller {
 
     public function index() {
         $thuonghieu = $this->ThuongHieuModel->all();
+
+
+         $limit = 5;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        if ($page < 1) $page = 1;
+        $offset = ($page - 1) * $limit;
+        $totalUsers = $this->ThuongHieuModel->countAll();
+        $totalPages = ceil($totalUsers / $limit);
+
+        if (isset($_GET['tukhoa']) && !empty($_GET['tukhoa'])) {
+            $tukhoa = $_GET['tukhoa'];
+            $thuonghieu = $this->ThuongHieuModel->timKiem($tukhoa);
+        } else {
+
+            $thuonghieu = $this->ThuongHieuModel->all();
+
+            $tukhoa = "";
+
+
+            $thuonghieu = $this->ThuongHieuModel->phantrang($offset, $limit);
+        }
+         $data = ['thuonghieu' => $thuonghieu];
+        if (isset($tukhoa)) {
+            $data['tukhoa'] = $tukhoa;
+        }
         // Sửa 'product' thành 'products'
-        $this->view('thuonghieu/index', ['thuonghieu' => $thuonghieu]); 
+        $this->view('admin/thuonghieu/index', ['thuonghieu' => $thuonghieu,
+             'tukhoa' => $tukhoa,
+            'totalPages' => $totalPages,
+            'page' => $page]); 
     }
 
     public function them() {
       
-        $this->view('thuonghieu/them', []); 
+        $this->view('admin/thuonghieu/them', []); 
     }
 
     public function luu() {
@@ -38,10 +67,10 @@ class ThuongHieuController extends Controller {
 
     public function edit($id) {
         $thuonghieu = $this->ThuongHieuModel->find($id);
-        $this->view('thuonghieu/edit', ['thuonghieu' => $thuonghieu]); 
+        $this->view('admin/thuonghieu/edit', ['thuonghieu' => $thuonghieu]); 
     }
 
-    public function update_product($id) {
+    public function update($id) {
          if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $tenthuonghieu = $_POST['tenthuonghieu'];
             $img = "";

@@ -67,7 +67,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
     
-    @include('layout.nav')
+    <?php echo $__env->make('layout.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
         <div class="auth-container shadow-sm">
@@ -104,8 +104,8 @@
         </div>
     </main>
 
-    @include('layout.footer')
+    <?php echo $__env->make('layout.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/auth/login.blade.php ENDPATH**/ ?>

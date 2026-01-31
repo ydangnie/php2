@@ -18,14 +18,15 @@ class AuthController extends Controller {
     }
 
     // Xử lý đăng nhập
-    public function postLogin() {
+    public function ktra() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $ten = $_POST['ten'];
+           
+            $email = $_POST['email'];
             $matkhau = $_POST['matkhau'];
             
-            $user = $this->userModel->timnguoidung($ten);
+            $user = $this->userModel->timnguoidung($email);
             
-            // Kiểm tra pass (Lưu ý: Code cũ bạn dùng password_hash, nên phải dùng password_verify)
+         
             if ($user && password_verify($matkhau, $user['matkhau'])) {
                 $_SESSION['user'] = $user;
                 if ($user['role'] == 'admin') {
@@ -45,19 +46,22 @@ class AuthController extends Controller {
         $this->view('auth.register');
     }
 
-    public function postRegister() {
+    public function luu() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        
+            $email = $_POST['email'];
             $ten = $_POST['ten'];
             $matkhau = password_hash($_POST['matkhau'], PASSWORD_DEFAULT); // Mã hóa pass
             
             // Kiểm tra trùng tên
-            if ($this->userModel->timnguoidung($ten)) {
+            if ($this->userModel->timnguoidung($email)) {
                 $_SESSION['error'] = "Tên tài khoản đã tồn tại!";
                 $this->redirect('/auth/register');
                 return;
             }
 
             $this->userModel->create([
+                'email' => $email,
                 'ten' => $ten,
                 'matkhau' => $matkhau,
                 'role' => 'nguoidung'

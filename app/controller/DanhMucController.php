@@ -15,7 +15,7 @@ class DanhMucController extends Controller {
 
     public function them() {
       
-        $this->view('danhmuc/them', []); 
+        $this->view('admin/danhmuc/them', []); 
     }
 
     public function luu() {
@@ -39,10 +39,10 @@ class DanhMucController extends Controller {
     public function edit($id) {
         $danhmuc = $this->DanhMucModel->find($id);
         // Sửa 'product' thành 'products'
-        $this->view('danhmuc/edit', ['danhmuc' => $danhmuc]); 
+        $this->view('admin/danhmuc/edit', ['danhmuc' => $danhmuc]); 
     }
 
-    public function update_product($id) {
+    public function update($id) {
          if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $tendanhmuc = $_POST['tendanhmuc'];
             $img = "";

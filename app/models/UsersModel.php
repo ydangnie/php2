@@ -2,7 +2,7 @@
 // Class name phải khớp với tên file để autoload hoạt động
 class UsersModel extends Model
 {
-    private $table = "login";
+    private $table = "users";
 
     public function all()
     {

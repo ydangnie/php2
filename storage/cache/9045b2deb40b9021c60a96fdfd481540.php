@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Quản lý danh mục</title>
+    <title>Quản lý thương hiệu</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
@@ -42,8 +42,8 @@
         
         <div class="card shadow-sm border-0 rounded-3">
             <div class="card-header p-3 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-boxes me-2"></i>Danh sách danh mục</h5>
-                <a href="/danhmuc/them" class="btn btn-primary btn-sm rounded-pill px-3">
+                <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-boxes me-2"></i>Danh sách thương hiệu</h5>
+                <a href="/thuonghieu/them" class="btn btn-primary btn-sm rounded-pill px-3">
                     <i class="fas fa-plus me-1"></i> Thêm mới
                 </a>
             </div>
@@ -58,10 +58,10 @@
                     <?php unset($_SESSION['thongbao']) ?>
                 <?php endif; ?>
 
-                <form action="/danhmuc/index" method="GET" class="row g-2 mb-4">
+                <form action="/thuonghieu/index" method="GET" class="row g-2 mb-4">
                     <div class="col-auto">
                         <div class="input-group">
-                            <input type="text" name="tukhoa" class="form-control" placeholder="Nhập tên danh mục..." value="<?= $_GET['tukhoa'] ?? '' ?>">
+                            <input type="text" name="tukhoa" class="form-control" placeholder="Nhập tên thương hiệu..." value="<?= $_GET['tukhoa'] ?? '' ?>">
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fas fa-search"></i> Tìm
                             </button>
@@ -75,12 +75,12 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Ảnh</th>
-                                <th>Tên danh mục</th>                                
+                                <th>Tên thương hiệu</th>                                
                                 <th class="text-center">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if (empty($danhmuc)): ?>
+                            <?php if (empty($thuonghieu)): ?>
                                 <tr>
                                     <td colspan="9" class="text-center text-muted py-4">
                                         <i class="fas fa-box-open fa-2x mb-2"></i><br>
@@ -88,24 +88,24 @@
                                     </td>
                                 </tr>
                             <?php else: ?>
-                                <?php foreach ($danhmuc as $dm): ?>
+                                <?php foreach ($thuonghieu as $dth): ?>
                                     <tr>
-                                        <td>#<?= $dm['id'] ?></td>
+                                        <td>#<?= $dth['id'] ?></td>
                                         <td>
-                                            <?php if(!empty($dm['img'])): ?>
-                                                <img src="/uploads/<?= $dm['img'] ?>" alt="" width="50" height="50">
+                                            <?php if(!empty($dth['img'])): ?>
+                                                <img src="/uploads/<?= $dth['img'] ?>" alt="" width="50" height="50">
                                             <?php else: ?>
                                                 <span class="badge bg-secondary">No Image</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td class="fw-semibold"><?= $dm['tendanhmuc'] ?></td>
+                                        <td class="fw-semibold"><?= $dth['tenthuonghieu'] ?></td>
                                      
                                      
                                         <td class="text-center">
-                                            <a href="/danhmuc/edit/<?= $dm['id'] ?>" class="btn btn-sm btn-outline-primary border-0" title="Sửa">
+                                            <a href="/thuonghieu/edit/<?= $dth['id'] ?>" class="btn btn-sm btn-outline-primary border-0" title="Sửa">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="/danhmuc/delete/<?= $dm['id'] ?>" onclick="return confirm('Bạn có chắc muốn xóa danh mục này?')" class="btn btn-sm btn-outline-danger border-0" title="Xóa">
+                                            <a href="/thuonghieu/delete/<?= $dth['id'] ?>" onclick="return confirm('Bạn có chắc muốn xóa thương hiệu này?')" class="btn btn-sm btn-outline-danger border-0" title="Xóa">
                                                 <i class="fas fa-trash-alt"></i>
                                             </a>
                                         </td>
@@ -116,7 +116,19 @@
                     </table>
                 </div>
 
-               
+                               <div class="d-flex justify-content-end mt-3">
+                    <nav>
+                        <ul class="pagination pagination-sm">
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                                    <a class="page-link" href="/thuonghieu/index?page=<?= $i ?>&tukhoa=<?= $_GET['tukhoa'] ?? '' ?>">
+                                        <?= $i ?>
+                                    </a>
+                                </li>
+                            <?php endfor; ?>
+                        </ul>
+                    </nav>
+                </div>
 
             </div>
         </div>
@@ -124,4 +136,4 @@
 
     </div>
 </body>
-</html><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/admin/danhmuc/index.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/admin/thuonghieu/index.blade.php ENDPATH**/ ?>

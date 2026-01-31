@@ -176,7 +176,7 @@
                         </ul>
                     </div>
                 <?php else: ?>
-                    <a href="/auth/dangnhap" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm" style="font-size: 0.85rem;">Login</a>
+                    <a href="/auth/login" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm" style="font-size: 0.85rem;">Login</a>
                 <?php endif; ?>
             </div>
         </div>

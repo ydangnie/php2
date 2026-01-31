@@ -39,9 +39,9 @@ class UsersController extends Controller
         
        
     }
-        $this->view('users/index', 
+        $this->view('admin/users/index', 
         ['users' => $users , 
-            'tukhoa' => $tukhoa,
+         
             'totalPages' => $totalPages,
             'page' => $page]);
     }
@@ -49,7 +49,7 @@ class UsersController extends Controller
     public function them()
     {
 
-        $this->view('users/them', []);
+        $this->view('admin/users/them', []);
     }
 
     public function luu()
@@ -75,10 +75,10 @@ class UsersController extends Controller
     {
         $users = $this->UsersModel->find($id);
         // Sửa 'product' thành 'products'
-        $this->view('users/edit', ['login' => $users]);
+        $this->view('admin/users/edit', ['login' => $users]);
     }
 
-    public function update_product($id)
+    public function update($id)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $ten = $_POST['ten'];
