@@ -8,80 +8,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        body {
-            background-color: #f8f9fa; /* Nền xám nhạt cho trang admin đỡ mỏi mắt */
-        }
+        body { background-color: #f8f9fa; }
         .admin-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 40px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            max-width: 800px; margin: 0 auto; background: #fff; padding: 40px;
+            border: 1px solid #e0e0e0; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        .form-label {
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #555;
-            margin-bottom: 0.5rem;
-        }
-        .form-control, .form-select {
-            border-radius: 0;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            background-color: #fff;
-            font-size: 0.95rem;
-        }
-        .form-control:focus, .form-select:focus {
-            box-shadow: none;
-            border-color: #000;
-            background-color: #fff;
-        }
-        .btn-dark-custom {
-            background-color: #000;
-            color: #fff;
-            border: 1px solid #000;
-            border-radius: 0;
-            padding: 12px 30px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-        }
-        .btn-dark-custom:hover {
-            background-color: #333;
-            color: #fff;
-        }
-        .btn-outline-cancel {
-            border: 1px solid #ddd;
-            border-radius: 0;
-            color: #666;
-            padding: 12px 30px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-outline-cancel:hover {
-            background-color: #f1f1f1;
-            color: #000;
-        }
-        .current-img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border: 1px solid #eee;
-            padding: 3px;
-        }
-        .page-header {
-            border-bottom: 2px solid #000;
-            padding-bottom: 15px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .form-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #555; margin-bottom: 0.5rem; }
+        .form-control, .form-select { border-radius: 0; padding: 10px 15px; border: 1px solid #ddd; background-color: #fff; font-size: 0.95rem; }
+        .form-control:focus, .form-select:focus { box-shadow: none; border-color: #000; }
+        .btn-dark-custom { background-color: #000; color: #fff; border: 1px solid #000; border-radius: 0; padding: 12px 30px; font-weight: 700; text-transform: uppercase; transition: all 0.3s; }
+        .btn-dark-custom:hover { background-color: #333; color: #fff; }
+        .btn-outline-cancel { border: 1px solid #ddd; border-radius: 0; color: #666; padding: 12px 30px; font-weight: 600; text-decoration: none; display: inline-block; }
+        .btn-outline-cancel:hover { background-color: #f1f1f1; color: #000; }
+        .current-img { width: 100px; height: 100px; object-fit: cover; border: 1px solid #eee; padding: 3px; }
+        .page-header { border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -100,13 +40,11 @@
                 </div>
 
                 <form action="/products/update_product/<?= $product['id'] ?>" method="POST" enctype="multipart/form-data">
-                    
                     <div class="row g-4">
                         <div class="col-12">
                             <label class="form-label">Tên Sản Phẩm</label>
-                            <input type="text" class="form-control" name="name" value="<?= $product['name'] ?>" required placeholder="Nhập tên sản phẩm...">
+                            <input type="text" class="form-control" name="name" value="<?= $product['name'] ?>" required>
                         </div>
-
                         <div class="col-md-6">
                             <label class="form-label">Giá (VNĐ)</label>
                             <div class="input-group">
@@ -115,10 +53,9 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Số Lượng Kho</label>
+                            <label class="form-label">Số Lượng Tổng</label>
                             <input type="number" class="form-control" name="soluong" value="<?= $product['soluong'] ?>" required>
                         </div>
-
                         <div class="col-md-6">
                             <label class="form-label">Danh Mục</label>
                             <select class="form-select" name="danhmuc_id" required>
@@ -130,7 +67,6 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
-
                         <div class="col-md-6">
                             <label class="form-label">Thương Hiệu</label>
                             <select class="form-select" name="thuonghieu_id" required>
@@ -142,36 +78,98 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
-
                         <div class="col-12">
                             <label class="form-label">Hình Ảnh</label>
                             <div class="d-flex align-items-start gap-4 p-3 bg-light border">
                                 <div class="text-center">
                                     <div class="small text-muted mb-2">Hiện tại</div>
                                     <?php if(!empty($product['img'])): ?>
-                                        <img src="/uploads/<?= $product['img'] ?>" alt="Current Image" class="current-img">
+                                        <img src="/uploads/<?= $product['img'] ?>" alt="Img" class="current-img">
                                     <?php else: ?>
                                         <div class="current-img d-flex align-items-center justify-content-center bg-white text-muted">No IMG</div>
                                     <?php endif; ?>
                                 </div>
-                                
                                 <div class="flex-grow-1">
                                     <div class="small text-muted mb-2">Thay đổi ảnh mới (Nếu cần)</div>
                                     <input type="file" class="form-control" name="img">
-                                    <div class="form-text mt-2 small">Chấp nhận: .jpg, .png, .jpeg</div>
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-12 mt-4 pt-3 border-top d-flex justify-content-end gap-3">
                             <a href="/products/index" class="btn btn-outline-cancel">Hủy bỏ</a>
-                            <button type="submit" class="btn btn-dark-custom">
-                                <i class="fas fa-save me-2"></i> Lưu Thay Đổi
-                            </button>
+                            <button type="submit" class="btn btn-dark-custom"><i class="fas fa-save me-2"></i> Lưu Thay Đổi</button>
                         </div>
                     </div>
-
                 </form>
+
+                <div class="mt-5 pt-4 border-top">
+                    <h5 class="fw-bold text-uppercase mb-3">Quản lý biến thể (Size/Màu)</h5>
+                    
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered table-sm align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="text-center">Ảnh</th>
+                                    <th>Màu</th>
+                                    <th>Size</th>
+                                    <th>Kho</th>
+                                    <th class="text-center">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($bienthe)): ?>
+                                    <?php foreach($bienthe as $bt): ?>
+                                    <tr>
+                                        <td class="text-center">
+                                            <?php if($bt['img']): ?>
+                                                <img src="/uploads/<?= $bt['img'] ?>" style="width: 40px; height: 40px; object-fit: cover;">
+                                            <?php else: ?>
+                                                <span class="text-muted small">-</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?= $bt['color'] ?></td>
+                                        <td><?= $bt['size'] ?></td>
+                                        <td><?= $bt['soluong'] ?></td>
+                                        <td class="text-center">
+                                            <a href="/products/delete_variant/<?= $bt['id'] ?>?product_id=<?= $product['id'] ?>" 
+                                               class="text-danger"
+                                               onclick="return confirm('Bạn chắc chắn muốn xóa biến thể này?')">
+                                               <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr><td colspan="5" class="text-center text-muted py-2">Chưa có biến thể nào</td></tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bg-light p-3 border">
+                        <label class="fw-bold small text-uppercase mb-2">Thêm nhanh biến thể mới</label>
+                        <form action="/products/add_variant_single/<?= $product['id'] ?>" method="POST" enctype="multipart/form-data">
+                            <div class="row g-2 align-items-end">
+                                <div class="col-md-2">
+                                    <input type="text" name="new_color" class="form-control form-control-sm" placeholder="Màu" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" name="new_size" class="form-control form-control-sm" placeholder="Size" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="number" name="new_soluong" class="form-control form-control-sm" placeholder="SL" value="1" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="file" name="new_variant_img" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-dark btn-sm w-100 rounded-0">Thêm</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </div>
     </main>

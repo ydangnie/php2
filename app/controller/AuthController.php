@@ -167,7 +167,7 @@ class AuthController extends Controller
         $client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']);
         
         // Đường dẫn này phải trùng KHỚP 100% trong Google Cloud Console
-        $client->setRedirectUri('http://localhost/auth/googleCallback'); 
+        $client->setRedirectUri('http://localhost:8000/auth/googleCallback'); 
         
         $client->addScope("email");
         $client->addScope("profile");
@@ -177,10 +177,11 @@ class AuthController extends Controller
         exit;
     }
     public function googleCallback() {
+        
         $client = new Google_Client();
         $client->setClientId($_ENV['GOOGLE_CLIENT_ID']);
         $client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']);
-        $client->setRedirectUri('http://localhost/auth/googleCallback');
+        $client->setRedirectUri('http://localhost:8000/auth/googleCallback');
 
         if (isset($_GET['code'])) {
             try {

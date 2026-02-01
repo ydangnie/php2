@@ -8,73 +8,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
+        body { background-color: #f8f9fa; }
         .admin-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 40px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            max-width: 800px; margin: 0 auto; background: #fff; padding: 40px;
+            border: 1px solid #e0e0e0; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        .form-label {
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #555;
-            margin-bottom: 0.5rem;
-        }
-        .form-control, .form-select {
-            border-radius: 0;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            background-color: #fff;
-            font-size: 0.95rem;
-        }
-        .form-control:focus, .form-select:focus {
-            box-shadow: none;
-            border-color: #000;
-            background-color: #fff;
-        }
-        .btn-dark-custom {
-            background-color: #000;
-            color: #fff;
-            border: 1px solid #000;
-            border-radius: 0;
-            padding: 12px 30px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-        }
-        .btn-dark-custom:hover {
-            background-color: #333;
-            color: #fff;
-        }
-        .btn-outline-cancel {
-            border: 1px solid #ddd;
-            border-radius: 0;
-            color: #666;
-            padding: 12px 30px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-outline-cancel:hover {
-            background-color: #f1f1f1;
-            color: #000;
-        }
-        .page-header {
-            border-bottom: 2px solid #000;
-            padding-bottom: 15px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .form-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #555; margin-bottom: 0.5rem; }
+        .form-control, .form-select { border-radius: 0; padding: 10px 15px; border: 1px solid #ddd; background-color: #fff; font-size: 0.95rem; }
+        .form-control:focus, .form-select:focus { box-shadow: none; border-color: #000; }
+        .btn-dark-custom { background-color: #000; color: #fff; border: 1px solid #000; border-radius: 0; padding: 12px 30px; font-weight: 700; text-transform: uppercase; transition: all 0.3s; }
+        .btn-dark-custom:hover { background-color: #333; color: #fff; }
+        .btn-outline-cancel { border: 1px solid #ddd; border-radius: 0; color: #666; padding: 12px 30px; font-weight: 600; text-decoration: none; display: inline-block; }
+        .btn-outline-cancel:hover { background-color: #f1f1f1; color: #000; }
+        .page-header { border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -108,7 +54,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Số Lượng Kho</label>
+                            <label class="form-label">Số Lượng Tổng</label>
                             <input type="number" class="form-control" name="soluong" required placeholder="0">
                         </div>
 
@@ -142,9 +88,24 @@
                         </div>
 
                         <div class="col-12">
-                            <label class="form-label">Hình Ảnh</label>
+                            <label class="form-label">Hình Ảnh Chính</label>
                             <input type="file" class="form-control" name="img" required>
                             <div class="form-text mt-2 small text-muted">Định dạng hỗ trợ: .jpg, .png, .jpeg</div>
+                        </div>
+                        
+                        <div class="col-12 mt-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2 border-bottom pb-2">
+                                <label class="form-label mb-0 text-primary">Biến thể sản phẩm (Màu/Size)</label>
+                                <button type="button" class="btn btn-sm btn-dark rounded-0" id="btn-add-variant">
+                                    <i class="fas fa-plus me-1"></i> Thêm dòng
+                                </button>
+                            </div>
+                            <div class="alert alert-light border small text-muted">
+                                Nếu sản phẩm có nhiều màu hoặc size, hãy thêm bên dưới.
+                            </div>
+                            
+                            <div id="variant-container">
+                                </div>
                         </div>
 
                         <div class="col-12 mt-4 pt-3 border-top d-flex justify-content-end gap-3">
@@ -160,8 +121,37 @@
         </div>
     </main>
 
-
-
+    <script>
+        document.getElementById('btn-add-variant').addEventListener('click', function() {
+            const container = document.getElementById('variant-container');
+            const html = `
+                <div class="row g-2 mb-2 border p-2 bg-white align-items-end variant-item position-relative">
+                    <div class="col-md-3">
+                        <label class="small text-muted">Màu sắc</label>
+                        <input type="text" name="variants_color[]" class="form-control form-control-sm" placeholder="Vd: Đỏ" required>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="small text-muted">Size</label>
+                        <input type="text" name="variants_size[]" class="form-control form-control-sm" placeholder="Vd: XL" required>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="small text-muted">Số lượng</label>
+                        <input type="number" name="variants_soluong[]" class="form-control form-control-sm" value="1" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="small text-muted">Ảnh riêng (Tùy chọn)</label>
+                        <input type="file" name="variants_img[]" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-md-1 text-end">
+                         <button type="button" class="btn btn-danger btn-sm rounded-0" onclick="this.closest('.variant-item').remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/admin/products/add.blade.php ENDPATH**/ ?>
