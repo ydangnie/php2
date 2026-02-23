@@ -95,4 +95,27 @@ class UsersModel extends Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
      
+    // Thêm vào app/models/UsersModel.php
+
+public function checkGoogleUser($email) {
+    $sql = "SELECT * FROM $this->table WHERE email = :email";
+    $conn = $this->connect();
+    $stmt = $conn->prepare($sql);
+    $stmt->execute(['email' => $email]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+public function createGoogleUser($email, $name, $google_id) {
+    // Lưu ý: matkhau để rỗng
+    $sql = "INSERT INTO $this->table (ten, email, google_id, role, matkhau) 
+            VALUES (:ten, :email, :google_id, 0, :matkhau)";
+    $conn = $this->connect();
+    $stmt = $conn->prepare($sql);
+    return $stmt->execute([
+        'ten' => $name,
+        'email' => $email,
+        'google_id' => $google_id,
+        'matkhau' => '' // Mật khẩu rỗng
+    ]);
+}
 }

@@ -75,6 +75,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Ảnh</th>
+                                <th>Email</th>
                                 <th>Tên</th>       
                                 <th>Mật khẩu</th> 
                                 <th>Role</th>                        
@@ -100,6 +101,7 @@
                                                 <span class="badge bg-secondary">No Image</span>
                                             <?php endif; ?>
                                         </td>
+                                        <td class="fw-semibold"><?= $user['email'] ?></td>
                                         <td class="fw-semibold"><?= $user['ten'] ?></td>
                                         <td class="fw-semibold"><?= $user['matkhau'] ?></td>
                                         <td class="fw-semibold"><?= $user['role'] ?></td>
@@ -120,7 +122,7 @@
                     </table>
                 </div>
 
-                               <div class="d-flex justify-content-end mt-3">
+                 <div class="d-flex justify-content-end mt-3">
                     <nav>
                         <ul class="pagination pagination-sm">
                             <?php for ($i = 1; $i <= $totalPages; $i++): ?>

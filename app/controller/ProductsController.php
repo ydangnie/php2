@@ -162,9 +162,7 @@ class ProductsController extends Controller
         }
     }
 
-    // --- CÁC HÀM XỬ LÝ BIẾN THỂ RỜI ---
-
-    // Thêm 1 biến thể từ trang Edit
+   
     public function add_variant_single($product_id) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
              $img = "";
@@ -187,15 +185,7 @@ class ProductsController extends Controller
     }
 
     // Xóa biến thể
-    public function delete_variant($id) {
-        // Cần lấy ID sản phẩm trước khi xóa để redirect về đúng chỗ
-        // Nhưng ở đây mình sẽ nhận cả id và product_id từ URL cho tiện, hoặc truy vấn
-        // Giả sử router gọi: /products/delete_variant/ID_BIENTHE/ID_SANPHAM
-        
-        // Để đơn giản, ta chỉ nhận ID biến thể, xóa xong redirect về trang list
-        // Tuy nhiên để quay lại trang edit, ta cần product_id.
-        // Cách tốt nhất là truyền product_id qua GET
-        
+    public function delete_variant($id) {        
         $product_id = $_GET['product_id']; // Lấy từ query string
         $this->productModel->deleteBienthe($id);
         

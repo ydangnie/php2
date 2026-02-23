@@ -1,6 +1,6 @@
 <?php 
+// app/controller/ViewController.php
 
-// 1. Phải kế thừa Controller để dùng được $this->view và $this->model
 class ViewController extends Controller {
     
     private $productModel;
@@ -9,24 +9,18 @@ class ViewController extends Controller {
     public function __construct()
     {
         $this->productModel = $this->model('ProductModel');
-          $this->DanhMucModel = $this->model('DanhMucModel');
+        $this->DanhMucModel = $this->model('DanhMucModel');
     }
-
-    public function trangchu()
+public function index()
     {
-   $danhmuc = $this->DanhMucModel->all(); 
-
+        $danhmuc = $this->DanhMucModel->all(); 
         $products = $this->productModel->all(); 
-
-        $this->view('view.trangchu', ['products' => $products, 'danhmuc' => $danhmuc]);
+        $this->view('view.index', ['products' => $products, 'danhmuc' => $danhmuc]);
     }
-    public function cart()
-    {
-   $danhmuc = $this->DanhMucModel->all(); 
+    public function chitiet(){
+          $this->view('view.chitiet', []);
 
-        $products = $this->productModel->all(); 
-
-        $this->view('view.cart', ['products' => $products, 'danhmuc' => $danhmuc]);
     }
+
 }
 ?>

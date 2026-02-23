@@ -6,7 +6,7 @@ class ProductModel extends Model
 
     public function all()
     {
-        $sql = "SELECT * FROM $this->table";
+        $sql = "SELECT * FROM $this->table p LEFT JOIN danhmuc d ON p.danhmuc_id = d.id";
         $conn = $this->connect();
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -15,7 +15,8 @@ class ProductModel extends Model
 
     public function find($id)
     {
-        $sql = "SELECT * FROM $this->table WHERE id = :id";
+        $sql = "SELECT *  FROM $this->table  WHERE id = :id";
+         
         $conn = $this->connect();
         $stmt = $conn->prepare($sql);
         $stmt->execute(['id' => $id]);
@@ -67,11 +68,10 @@ class ProductModel extends Model
         $stmt = $conn->prepare($sql);
         return $stmt->execute(['id' => $id]);
     }
-    
-    // SỬA HÀM TÌM KIẾM ĐỂ HIỂN THỊ SIZE
+
     public function timKiem($tukhoa)
     {
-        // Dùng GROUP_CONCAT để gộp các size lại thành 1 chuỗi ngăn cách bởi dấu phẩy
+     
         $sql = "SELECT p.*, d.tendanhmuc, t.tenthuonghieu,
                        GROUP_CONCAT(DISTINCT bp.size SEPARATOR ', ') as list_size,
                        GROUP_CONCAT(DISTINCT bp.color SEPARATOR ', ') as list_color

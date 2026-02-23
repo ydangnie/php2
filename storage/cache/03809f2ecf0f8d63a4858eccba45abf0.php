@@ -50,6 +50,12 @@
                 Mã giảm giá
             </a>
         </li>
+          <li>
+            <a href="/contacts/index" class="nav-link text-white <?php echo e(strpos($_SERVER['REQUEST_URI'], 'contacts') !== false ? 'active bg-primary' : ''); ?>">
+                <i class="fas fa-envelope me-2" style="width: 20px;"></i>
+                Liên hệ
+            </a>
+        </li>
         </li>
     </ul>
     <hr>

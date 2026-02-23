@@ -15,7 +15,7 @@ class Router
         
         // Mặc định là HomeController và action index
         $controllerName = ucfirst($segments[0] ?? 'View') . 'Controller';
-        $action = $segments[1] ?? 'trangchu';
+       $action = $segments[1] ?? 'index';
         $params = array_slice($segments, 2);
 
         // Sửa logic: Nếu class KHÔNG tồn tại thì báo lỗi

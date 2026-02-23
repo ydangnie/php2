@@ -135,7 +135,7 @@
       <div class="row g-4">
         @if(isset($products) && count($products) > 0)
             @foreach($products as $product)
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-lg-3" >
                 <div class="card h-100 product-card border-0">
                     <div class="product-img-container position-relative">
                         @if(!empty($product['img']))
@@ -149,7 +149,7 @@
                         </div>
 
                     <div class="card-body text-center pt-4">
-                        <div class="text-muted small mb-1 text-uppercase">{{ $product['tendanhmuc'] ?? 'FASHION' }}</div>
+                        <div class="text-muted small mb-1 text-uppercase">{{ $product['tendanhmuc'] }}</div>
                         <h5 class="card-title fw-bold text-truncate px-2">{{ $product['name'] }}</h5>
                         <p class="price-tag text-dark mb-3">{{ number_format($product['price']) }} VNĐ</p>
                         

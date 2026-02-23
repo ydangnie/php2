@@ -167,7 +167,7 @@ class AuthController extends Controller
         $client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']);
         
         // Đường dẫn này phải trùng KHỚP 100% trong Google Cloud Console
-        $client->setRedirectUri('http://localhost:8000/auth/googleCallback'); 
+        $client->setRedirectUri('http://localhost:8000/auth/googleCallback');
         
         $client->addScope("email");
         $client->addScope("profile");
