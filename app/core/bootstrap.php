@@ -7,7 +7,19 @@ define('APP_PATH', BASE_PATH . '/app');
 define('VIEW_PATH', APP_PATH . '/views');
 define('CONTROLLER_PATH', APP_PATH . '/controller'); // Chú ý: controller (số ít)
 define('MODEL_PATH', APP_PATH . '/models');
+// Thêm đoạn code này lên ĐẦU file bootstrap.php hoặc index.php
+function loadEnv($path) {
+    if (!file_exists($path)) return;
+    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) continue; // Bỏ qua comment
+        list($name, $value) = explode('=', $line, 2);
+        $_ENV[trim($name)] = trim($value);
+    }
+}
 
+// Gọi hàm load file .env (Giả sử file .env nằm ở thư mục gốc)
+loadEnv(__DIR__ . '/../../.env');
 // 2. Load Composer Autoload (BẮT BUỘC CHẠY ĐẦU TIÊN)
 if (file_exists(BASE_PATH . '/vendor/autoload.php')) {
     require_once BASE_PATH . '/vendor/autoload.php';

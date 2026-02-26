@@ -147,14 +147,14 @@
 
         <div id="uniqueNavbarCollapse" class="collapse navbar-collapse">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link umh-link active" href="/view/index">Home</a></li>
+                <li class="nav-item"><a class="nav-link umh-link active" href="/view/index">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link umh-link active" href="/view/sanpham">Sản phẩm</a></li>
                 <?php 
-    // Lấy role ra để kiểm tra
              $user = $_SESSION['user'] ?? null;
-             $role = 'nguoidung';
-             if ($user) {
-            $role = is_array($user) ? $user['role'] : ($user->role ?? 'nguoidung');
-              }
+$role = 'nguoidung';
+if ($user) {
+    $role = is_array($user) ? $user['role'] : ($user->role ?? 'nguoidung');
+}
                 ?>
 
                 <?php if ($role == 'admin'): ?>
@@ -174,22 +174,21 @@
                                     class="fas fa-users me-2 text-muted"></i>Người dùng</a></li>
                         <li><a class="dropdown-item" href="/magiamgia/index"><i
                                     class="fas fa-ticket-alt me-2 text-muted"></i>Mã giảm giá</a>
-                                </li>
-                                <li>
+                        </li>
+                        <li>
                             <a class="dropdown-item" href="/contacts/index"><i
-                                        class="fas fa-envelope me-2 text-muted"></i>Liên hệ</a>
-                                </li>
+                                    class="fas fa-envelope me-2 text-muted"></i>Liên hệ</a>
+                        </li>
                     </ul>
                 </li>
                 <?php endif; ?>
             </ul>
 
             <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
-                <form class="d-flex" role="search">
-                    <div class="umh-search-group d-flex align-items-center">
-                        <input class="form-control umh-search-input" type="search" placeholder="Tìm kiếm..." />
-                        <button class="btn umh-search-btn" type="submit"><i class="fas fa-search fa-xs"></i></button>
-                    </div>
+                <form action="/view/timkiem" method="GET" class="d-flex">
+                    <input class="form-control rounded-0 border-dark me-2" type="search" name="keyword"
+                        placeholder="Nhập tên sản phẩm..." required>
+                    <button class="btn btn-dark rounded-0" type="submit"><i class="fas fa-search"></i></button>
                 </form>
 
                 <a href="view/cart" class="umh-icon-action text-decoration-none" title="Giỏ hàng">
@@ -197,6 +196,9 @@
                     <span
                         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light"
                         style="font-size: 0.6rem;">0</span>
+                </a>
+                <a href="/view/yeuthich" class="text-dark me-3 position-relative" title="Yêu thích">
+                    <i class="fas fa-heart fs-5"></i>
                 </a>
 
                 <?php if(isset($_SESSION['user'])): ?>
@@ -206,9 +208,9 @@
                                         <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center"
                                             style="width: 32px; height: 32px;">
                                             <?php 
-                                                    $ten = is_array($_SESSION['user']) ? $_SESSION['user']['ten'] : $_SESSION['user']->ten;
+                                                                                    $ten = is_array($_SESSION['user']) ? $_SESSION['user']['ten'] : $_SESSION['user']->ten;
                     echo strtoupper(substr($ten ?? 'M', 0, 1));
-                                                ?>
+                                                                                ?>
                                         </div>
                                         <span class="d-none d-md-block">
                                             <?php    echo is_array($_SESSION['user']) ? $_SESSION['user']['ten'] : $_SESSION['user']->ten; ?>
@@ -217,6 +219,10 @@
                                     <ul class="dropdown-menu dropdown-menu-end mt-2">
                                         <li><a class="dropdown-item" href="/profile">Hồ sơ</a></li>
                                         <li><a class="dropdown-item" href="/orders">Đơn hàng</a></li>
+                                        <li><a href="/view/daxem" class="dropdown-item" title="Đã xem gần đây">
+                                               Đã xem gần đây
+                                            </a>
+                                        </li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>

@@ -144,5 +144,169 @@ class ProductModel extends Model
         $stmt = $conn->prepare($sql);
         return $stmt->execute(['id' => $id]);
     }
+    // Hàm lấy sản phẩm có lọc và phân trang
+    public function getFilteredProducts($limit, $offset, $category_id = null, $min_price = null, $max_price = null)
+    {
+        $sql = "SELECT p.*, d.tendanhmuc, t.tenthuonghieu,
+                       GROUP_CONCAT(DISTINCT bp.size ORDER BY bp.size ASC SEPARATOR ', ') as list_size,
+                       GROUP_CONCAT(DISTINCT bp.color SEPARATOR ', ') as list_color
+                FROM $this->table p
+                LEFT JOIN danhmuc d ON p.danhmuc_id = d.id
+                LEFT JOIN thuonghieu t ON p.thuonghieu_id = t.id
+                LEFT JOIN bienthe_products bp ON p.id = bp.id_products
+                WHERE 1=1";
+        
+        $params = [];
+
+        // Lọc theo danh mục (loại)
+        if (!empty($category_id)) {
+            $sql .= " AND p.danhmuc_id = :category_id";
+            $params['category_id'] = $category_id;
+        }
+
+        // Lọc theo giá tối thiểu
+        if (!empty($min_price)) {
+            $sql .= " AND p.price >= :min_price";
+            $params['min_price'] = $min_price;
+        }
+
+        // Lọc theo giá tối đa
+        if (!empty($max_price)) {
+            $sql .= " AND p.price <= :max_price";
+            $params['max_price'] = $max_price;
+        }
+
+        $sql .= " GROUP BY p.id LIMIT :limit OFFSET :offset";
+
+        $conn = $this->connect();
+        $stmt = $conn->prepare($sql);
+
+        // Bind các tham số động
+        foreach ($params as $key => &$val) {
+            $stmt->bindParam(":$key", $val);
+        }
+        
+        // Bind limit và offset (bắt buộc phải là kiểu INT)
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Hàm đếm tổng số sản phẩm để tính tổng số trang
+    public function countFilteredProducts($category_id = null, $min_price = null, $max_price = null)
+    {
+        $sql = "SELECT COUNT(DISTINCT p.id) as total FROM $this->table p WHERE 1=1";
+        $params = [];
+
+        if (!empty($category_id)) {
+            $sql .= " AND p.danhmuc_id = :category_id";
+            $params['category_id'] = $category_id;
+        }
+        if (!empty($min_price)) {
+            $sql .= " AND p.price >= :min_price";
+            $params['min_price'] = $min_price;
+        }
+        if (!empty($max_price)) {
+            $sql .= " AND p.price <= :max_price";
+            $params['max_price'] = $max_price;
+        }
+
+        $conn = $this->connect();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['total'];
+    }
+    // Thêm vào trong class ProductModel
+    public function getRelatedProducts($danhmuc_id, $current_id, $limit = 4)
+    {
+        $sql = "SELECT p.*, d.tendanhmuc 
+                FROM $this->table p 
+                LEFT JOIN danhmuc d ON p.danhmuc_id = d.id 
+                WHERE p.danhmuc_id = :danhmuc_id AND p.id != :current_id 
+                LIMIT :limit";
+        
+        $conn = $this->connect();
+        $stmt = $conn->prepare($sql);
+        
+        $stmt->bindValue(':danhmuc_id', $danhmuc_id, PDO::PARAM_INT);
+        $stmt->bindValue(':current_id', $current_id, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    // Thêm hoặc xóa sản phẩm yêu thích (Toggle)
+    public function toggleYeuThich($user_id, $product_id)
+    {
+        $conn = $this->connect();
+        
+        // Kiểm tra xem đã yêu thích chưa
+        $checkSql = "SELECT * FROM yeuthich WHERE user_id = :user_id AND product_id = :product_id";
+        $stmtCheck = $conn->prepare($checkSql);
+        $stmtCheck->execute(['user_id' => $user_id, 'product_id' => $product_id]);
+        
+        if ($stmtCheck->rowCount() > 0) {
+            // Nếu có rồi thì XÓA (Bỏ yêu thích)
+            $delSql = "DELETE FROM yeuthich WHERE user_id = :user_id AND product_id = :product_id";
+            $stmtDel = $conn->prepare($delSql);
+            $stmtDel->execute(['user_id' => $user_id, 'product_id' => $product_id]);
+            return 'removed';
+        } else {
+            // Nếu chưa có thì THÊM (Yêu thích)
+            $addSql = "INSERT INTO yeuthich (user_id, product_id) VALUES (:user_id, :product_id)";
+            $stmtAdd = $conn->prepare($addSql);
+            $stmtAdd->execute(['user_id' => $user_id, 'product_id' => $product_id]);
+            return 'added';
+        }
+    }
+    // Lấy danh sách sản phẩm yêu thích của 1 user
+    public function getDanhSachYeuThich($user_id)
+    {
+        $sql = "SELECT p.*, d.tendanhmuc 
+                FROM $this->table p
+                INNER JOIN yeuthich y ON p.id = y.product_id
+                LEFT JOIN danhmuc d ON p.danhmuc_id = d.id
+                WHERE y.user_id = :user_id
+                ORDER BY y.created_at DESC";
+                
+        $conn = $this->connect();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['user_id' => $user_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    // Lấy danh sách sản phẩm theo mảng ID (Dành cho chức năng Đã xem gần đây)
+    public function getProductsByIds($ids)
+    {
+        if (empty($ids)) return [];
+
+        // Tạo ra chuỗi các dấu chấm hỏi (?, ?, ?) tương ứng với số lượng ID
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        
+        $sql = "SELECT p.*, d.tendanhmuc 
+                FROM $this->table p
+                LEFT JOIN danhmuc d ON p.danhmuc_id = d.id
+                WHERE p.id IN ($placeholders)";
+        
+        $conn = $this->connect();
+        $stmt = $conn->prepare($sql);
+        // Truyền mảng ids vào execute để bind giá trị an toàn
+        $stmt->execute($ids);
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Sắp xếp lại kết quả theo đúng thứ tự của mảng $ids (từ mới nhất -> cũ nhất)
+        $sorted_products = [];
+        foreach ($ids as $id) {
+            foreach ($products as $p) {
+                if ($p['id'] == $id) {
+                    $sorted_products[] = $p;
+                    break;
+                }
+            }
+        }
+        return $sorted_products;
+    }
 }
 ?>

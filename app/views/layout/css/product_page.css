@@ -1,0 +1,281 @@
+/* =========================================
+   CSS DÀNH RIÊNG CHO TRANG SẢN PHẨM 
+   ========================================= */
+
+.page-sanpham-wrap {
+    background-color: #fff;
+    color: #000;
+}
+
+
+/* Sidebar bộ lọc */
+
+.page-sanpham-wrap .sp-filter-box {
+    border: 1px solid #000;
+    border-radius: 0;
+}
+
+.page-sanpham-wrap .sp-filter-header {
+    background-color: #000;
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 0;
+    padding: 12px 15px;
+}
+
+.page-sanpham-wrap .sp-filter-item {
+    border: none;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.page-sanpham-wrap .sp-filter-item:hover {
+    background-color: #f8f9fa;
+    color: #000;
+    padding-left: 20px;
+    /* Hiệu ứng trượt nhẹ */
+}
+
+.page-sanpham-wrap .sp-filter-item.active {
+    background-color: #f0f0f0;
+    color: #000;
+    font-weight: bold;
+    border-left: 4px solid #000;
+    /* Điểm nhấn thay vì nền đen toàn bộ */
+}
+
+
+/* Nút bấm lọc */
+
+.page-sanpham-wrap .btn-sp-filter {
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #000;
+    border-radius: 0;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.page-sanpham-wrap .btn-sp-filter:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+
+/* Phân trang */
+
+.page-sanpham-wrap .sp-pagination .page-link {
+    color: #000;
+    border: 1px solid #000;
+    margin: 0 5px;
+    border-radius: 0 !important;
+    /* Vuông vức chuẩn Monochrome */
+    font-weight: bold;
+}
+
+.page-sanpham-wrap .sp-pagination .page-item.active .page-link {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+
+/* =========================================
+   CSS DÀNH RIÊNG CHO TRANG CHI TIẾT 
+   ========================================= */
+
+.page-chitiet-wrap {
+    background-color: #fff;
+}
+
+
+/* Khung chứa ảnh chi tiết */
+
+.page-chitiet-wrap .ct-image-frame {
+    border: 1px solid #eee;
+    padding: 10px;
+    background-color: #fafafa;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-chitiet-wrap .ct-image-frame img {
+    max-height: 100%;
+    object-fit: cover;
+}
+
+
+/* Tiêu đề & Giá */
+
+.page-chitiet-wrap .ct-title {
+    font-weight: 800;
+    font-size: 2.2rem;
+    letter-spacing: 1px;
+}
+
+.page-chitiet-wrap .ct-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #000;
+    border-bottom: 2px solid #000;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+
+/* Input Số lượng & Nút Thêm vào giỏ */
+
+.page-chitiet-wrap .ct-quantity-input {
+    border: 2px solid #000;
+    border-radius: 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.page-chitiet-wrap .btn-ct-add {
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #000;
+    border-radius: 0;
+    font-weight: 800;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+
+.page-chitiet-wrap .btn-ct-add:hover {
+    background-color: transparent;
+    color: #000;
+}
+
+
+/* Box thông tin bảo hành / chính sách */
+
+.page-chitiet-wrap .ct-policy-box {
+    background-color: #f8f9fa;
+    border: 1px dashed #ccc;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+
+/* 1. Cố định kích thước khung ảnh */
+
+.product-img-container {
+    width: 100%;
+    height: 300px;
+    /* Bạn có thể tăng/giảm tuỳ ý, ví dụ 280px hoặc 320px */
+    overflow: hidden;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Ép ảnh lấp đầy khung mà không bị méo (tự động cắt phần thừa) */
+
+.product-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+
+/* Hiệu ứng zoom khi di chuột */
+
+.product-card:hover .product-img-container img {
+    transform: scale(1.05);
+}
+
+
+/* 2. Đảm bảo toàn bộ thẻ Card có chiều cao bằng nhau */
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* Kéo dài bằng nhau trong cùng 1 hàng */
+    border: 1px solid #eee;
+}
+
+
+/* 3. Căn chỉnh nội dung bên trong Card */
+
+.product-card .card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    /* Chiếm toàn bộ không gian còn lại */
+}
+
+
+/* Đẩy nút "Xem chi tiết" / "Thêm vào giỏ" xuống sát đáy khung */
+
+.product-card .card-body .d-grid {
+    margin-top: auto;
+}
+
+
+/* 1. Ép khung ảnh bằng nhau */
+
+.product-img-container {
+    width: 100%;
+    height: 280px;
+    /* Bạn có thể điều chỉnh số này */
+    overflow: hidden;
+    position: relative;
+}
+
+.product-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Cắt cúp ảnh cho vuông vức, không bị méo */
+}
+
+
+/* 2. Cấu trúc Card sử dụng Flexbox */
+
+.product-card {
+    height: 100%;
+    /* Giúp các card trong cùng 1 hàng cao bằng nhau */
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* 3. Giới hạn tên sản phẩm (Tối đa 2 dòng, chiều cao cố định) */
+
+.product-card .card-title a {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Cắt chữ nếu vượt quá 2 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    min-height: 2.8em;
+    /* Chiều cao cố định bằng 2 dòng chữ */
+    white-space: normal;
+}
+
+
+/* Tìm đoạn CSS này trong file product_page.css */
+
+.page-chitiet-wrap .ct-image-frame {
+    border: 1px solid #eee;
+    padding: 10px;
+    background-color: #fafafa;
+    /* SỬA DÒNG NÀY: Giảm từ 600px xuống 400px hoặc 450px */
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -3,30 +3,24 @@
 class CartController extends Controller {
     private $productModel;
     private $couponModel;
-    private $DanhMucModel; // Thêm model danh mục để hiển thị menu
+    private $DanhMucModel; 
 
     public function __construct() {
         $this->productModel = $this->model('ProductModel');
         $this->couponModel = $this->model('MaGiamGiaModel');
-        // Cần danh mục để hiển thị Header/Nav
         $this->DanhMucModel = $this->model('DanhMucModel'); 
     }
 
     // 1. Hiển thị giỏ hàng
     public function index() {
-        // Lấy danh mục cho Menu (Nav)
         $danhmuc = $this->DanhMucModel->all(); 
-
-        // Lấy giỏ hàng từ Session
         $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
         $total = 0;
         
-        // Tính tổng tiền
         foreach($cart as $item) {
             $total += $item['price'] * $item['quantity'];
         }
         
-        // Tính giảm giá
         $discount = 0;
         if(isset($_SESSION['coupon'])) {
             $c = $_SESSION['coupon'];
@@ -39,13 +33,12 @@ class CartController extends Controller {
 
         if($discount > $total) $discount = $total;
 
-        // Truyền đầy đủ biến sang View
         $this->view('view.cart', [
             'cart' => $cart,
             'total' => $total,
             'discount' => $discount,
             'final_total' => $total - $discount,
-            'danhmuc' => $danhmuc // Truyền danh mục sang view
+            'danhmuc' => $danhmuc 
         ]);
     }
 
@@ -53,7 +46,7 @@ class CartController extends Controller {
     public function add($id) {
         $product = $this->productModel->find($id);
         if(!$product) {
-            header('Location: view/cart'); // Dùng header thay vì $this->redirect để an toàn
+            header('Location: /cart'); // FIX: Sửa thành /cart
             exit();
         }
 
@@ -61,7 +54,6 @@ class CartController extends Controller {
         $color = $_POST['color'] ?? 'Mặc định';
         $qty = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
 
-        // ID giỏ hàng kết hợp: id_size_color
         $cartId = $id . '_' . $size . '_' . $color;
 
         if(!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
@@ -81,14 +73,17 @@ class CartController extends Controller {
         }
         
         $_SESSION['success'] = "Đã thêm sản phẩm vào giỏ!";
-        header('Location: /cart'); // Chuyển hướng về URL /cart
+        header('Location: /cart'); // FIX: Đã sửa lại đường dẫn chuẩn
         exit();
     }
 
     // 3. Cập nhật số lượng
     public function update() {
         if(isset($_POST['qty']) && isset($_SESSION['cart'])) {
-            foreach($_POST['qty'] as $cartId => $newQty) {
+            foreach($_POST['qty'] as $encodedCartId => $newQty) {
+                // FIX: Giải mã base64 để lấy lại ID chuẩn có dấu cách
+                $cartId = base64_decode($encodedCartId); 
+                
                 if($newQty <= 0) {
                     unset($_SESSION['cart'][$cartId]);
                 } elseif (isset($_SESSION['cart'][$cartId])) {
@@ -105,15 +100,25 @@ class CartController extends Controller {
     public function applyCoupon() {
         if(isset($_POST['code'])) {
             $code = trim($_POST['code']);
-            $coupon = $this->couponModel->timTheoMa($code); // Đảm bảo model có hàm này
+            $coupon = $this->couponModel->timTheoMa($code); 
             
             if($coupon && $coupon['so_luong'] > 0) {
                 $_SESSION['coupon'] = $coupon;
                 $_SESSION['success'] = "Áp dụng mã thành công!";
             } else {
                 unset($_SESSION['coupon']);
-                $_SESSION['error'] = "Mã không hợp lệ!";
+                $_SESSION['error'] = "Mã không hợp lệ hoặc đã hết hạn!";
             }
+        }
+        header('Location: /cart');
+        exit();
+    }
+
+    // FIX: Bổ sung hàm gỡ mã giảm giá bị thiếu
+    public function removeCoupon() {
+        if(isset($_SESSION['coupon'])) {
+            unset($_SESSION['coupon']);
+            $_SESSION['success'] = "Đã gỡ mã giảm giá!";
         }
         header('Location: /cart');
         exit();
@@ -121,8 +126,12 @@ class CartController extends Controller {
     
     // 5. Xóa 1 sản phẩm
     public function remove($cartId) {
-        if(isset($_SESSION['cart'][$cartId])) {
-            unset($_SESSION['cart'][$cartId]);
+        // FIX: Giải mã ID lấy từ URL về lại nguyên bản
+        $cartIdDecode = base64_decode($cartId); 
+        
+        if(isset($_SESSION['cart'][$cartIdDecode])) {
+            unset($_SESSION['cart'][$cartIdDecode]);
+            $_SESSION['success'] = "Đã xóa sản phẩm khỏi giỏ hàng!";
         }
         if(empty($_SESSION['cart'])) unset($_SESSION['coupon']);
         
@@ -134,6 +143,7 @@ class CartController extends Controller {
     public function clear() {
         unset($_SESSION['cart']);
         unset($_SESSION['coupon']);
+        $_SESSION['success'] = "Đã dọn sạch giỏ hàng!";
         header('Location: /cart');
         exit();
     }
