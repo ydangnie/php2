@@ -123,7 +123,7 @@ public function createGoogleUser($email, $name, $google_id) {
         $sql = "UPDATE users SET name = :name, avatar = :avatar WHERE id = :id";
         $stmt = $this->connect()->prepare($sql);
         return $stmt->execute([
-            'name' => $name,
+            'ten' => $name,
             'avatar' => $avatar,
             'id' => $id
         ]);

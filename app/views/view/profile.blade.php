@@ -47,7 +47,7 @@
                                 <div class="col-md-8">
                                     <div class="mb-3">
                                         <label class="fw-bold small text-uppercase">Họ và tên</label>
-                                        <input type="text" name="name" class="form-control rounded-0 border-dark" value="{{ $user_info['ten'] }}" required>
+                                        <input type="text" name="ten" class="form-control rounded-0 border-dark" value="{{ $user_info['ten'] }}" required>
                                     </div>
                                     <div class="mb-3">
                                         <label class="fw-bold small text-uppercase">Email đăng nhập (Không thể đổi)</label>

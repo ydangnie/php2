@@ -31,7 +31,7 @@ class ProfileController extends Controller {
     // Xử lý cập nhật Tên & Avatar
     public function update() {
         $user_id = $_SESSION['user']['id'];
-        $name = trim($_POST['name']);
+        $name = trim($_POST['ten']);
         
         // Xử lý upload ảnh
         $avatar = $_POST['old_avatar'] ?? 'default-avatar.png';
