@@ -20,20 +20,48 @@ class CheckoutController extends Controller {
         $discount = isset($_SESSION['coupon']) ? ($_SESSION['coupon']['loai'] == 'fixed' ? $_SESSION['coupon']['gia_tri'] : $total * ($_SESSION['coupon']['gia_tri'] / 100)) : 0;
         $final_total = $total - $discount;
 
+        $addressModel = $this->model('AddressModel');
+        $addresses = [];
+        if (isset($_SESSION['user'])) {
+            $addresses = $addressModel->getByUserId($_SESSION['user']['id']);
+        }
+
         $this->view('view.checkout', [
             'cart' => $_SESSION['cart'],
             'total' => $total,
             'discount' => $discount,
-            'final_total' => $final_total
+            'final_total' => $final_total,
+            'addresses' => $addresses // Truyền biến này ra View
         ]);
     }
 
     // 2. Xử lý lưu đơn
+    // 2. Xử lý lưu đơn
     public function process() {
         if (session_status() == PHP_SESSION_NONE) session_start();
-        if (empty($_SESSION['cart'])) header("Location: /cart");
+        if (empty($_SESSION['cart'])) {
+            header("Location: /cart");
+            exit();
+        }
 
-        // Tính lại tiền an toàn ở backend
+        $address_id = $_POST['address_id'] ?? null;
+        if (!$address_id) {
+            $_SESSION['error'] = "Vui lòng chọn địa chỉ giao hàng!";
+            header("Location: /checkout");
+            exit();
+        }
+
+        // Gọi AddressModel để lấy thông tin chi tiết của địa chỉ vừa chọn
+        $addressModel = $this->model('AddressModel');
+        $address_info = $addressModel->find($address_id);
+
+        if (!$address_info) {
+            $_SESSION['error'] = "Địa chỉ không tồn tại!";
+            header("Location: /checkout");
+            exit();
+        }
+
+        // Tính lại tiền
         $total = 0;
         foreach ($_SESSION['cart'] as $item) $total += $item['price'] * $item['quantity'];
         $discount = isset($_SESSION['coupon']) ? ($_SESSION['coupon']['loai'] == 'fixed' ? $_SESSION['coupon']['gia_tri'] : $total * ($_SESSION['coupon']['gia_tri'] / 100)) : 0;
@@ -41,11 +69,12 @@ class CheckoutController extends Controller {
 
         $phuong_thuc = $_POST['payment_method'] ?? 'cod';
         
+        // Gán dữ liệu đơn hàng lấy trực tiếp từ Sổ địa chỉ
         $data = [
-            'user_id' => $_SESSION['user']['id'] ?? null,
-            'ten_nguoi_nhan' => trim($_POST['fullname']),
-            'sdt' => trim($_POST['phone']),
-            'dia_chi' => trim($_POST['address']),
+            'user_id' => $_SESSION['user']['id'],
+            'ten_nguoi_nhan' => $address_info['ten_nguoi_nhan'],
+            'sdt' => $address_info['sdt'],
+            'dia_chi' => $address_info['dia_chi'],
             'ghi_chu' => trim($_POST['note']),
             'tong_tien' => $final_total,
             'phuong_thuc_tt' => $phuong_thuc,
@@ -56,14 +85,13 @@ class CheckoutController extends Controller {
         $donhang_id = $this->orderModel->taoDonHang($data, $_SESSION['cart']);
 
         if ($phuong_thuc == 'vnpay') {
-            // GỌI HÀM VNPAY
             $this->thanhToanVNPay($donhang_id, $final_total);
         } else {
-            // Thanh toán COD (Tiền mặt)
             unset($_SESSION['cart']);
             unset($_SESSION['coupon']);
             $_SESSION['success'] = "Đặt hàng thành công! Mã đơn của bạn là #DH" . $donhang_id;
-            header("Location: /cart"); // Tạm thời redirect về giỏ hàng
+            header("Location: /cart");
+            exit();
         }
     }
 

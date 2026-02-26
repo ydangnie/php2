@@ -22,7 +22,7 @@ class ViewController extends Controller
     public function sanpham()
     {
         // 1. Cấu hình phân trang
-        $limit = 20; // 20 sản phẩm 1 trang
+        $limit = 9; // 20 sản phẩm 1 trang
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         if ($page < 1) $page = 1;
         $offset = ($page - 1) * $limit;

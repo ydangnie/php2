@@ -118,4 +118,14 @@ public function createGoogleUser($email, $name, $google_id) {
         'matkhau' => '' // Mật khẩu rỗng
     ]);
 }
+// Thêm hàm này vào trong class UsersModel
+    public function updateProfile($id, $name, $avatar) {
+        $sql = "UPDATE users SET name = :name, avatar = :avatar WHERE id = :id";
+        $stmt = $this->connect()->prepare($sql);
+        return $stmt->execute([
+            'name' => $name,
+            'avatar' => $avatar,
+            'id' => $id
+        ]);
+    }
 }

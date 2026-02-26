@@ -6,7 +6,7 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="/admin/dashboard" class="nav-link text-white {{ strpos($_SERVER['REQUEST_URI'], 'dashboard') !== false ? 'active bg-primary' : '' }}">
+            <a href="/admin/dashboard" class="nav-link text-white <?php echo e(strpos($_SERVER['REQUEST_URI'], 'dashboard') !== false ? 'active bg-primary' : ''); ?>">
                 <i class="fas fa-home me-2" style="width: 20px;"></i>
                 Dashboard
             </a>
@@ -15,43 +15,43 @@
             <small class="text-white-50 text-uppercase fw-bold ps-3" style="font-size: 12px;">Quản lý</small>
         </li>
         <li>
-            <a href="/products/index" class="nav-link text-white {{ strpos($_SERVER['REQUEST_URI'], 'products') !== false ? 'active bg-primary' : '' }}">
+            <a href="/products/index" class="nav-link text-white <?php echo e(strpos($_SERVER['REQUEST_URI'], 'products') !== false ? 'active bg-primary' : ''); ?>">
                 <i class="fas fa-box me-2" style="width: 20px;"></i>
                 Sản phẩm
             </a>
         </li>
         <li>
-            <a href="/danhmuc/index" class="nav-link text-white {{ strpos($_SERVER['REQUEST_URI'], 'danhmuc') !== false ? 'active bg-primary' : '' }}">
+            <a href="/danhmuc/index" class="nav-link text-white <?php echo e(strpos($_SERVER['REQUEST_URI'], 'danhmuc') !== false ? 'active bg-primary' : ''); ?>">
                 <i class="fas fa-list me-2" style="width: 20px;"></i>
                 Danh mục
             </a>
         </li>
         <li>
-            <a href="/thuonghieu/index" class="nav-link text-white {{ strpos($_SERVER['REQUEST_URI'], 'thuonghieu') !== false ? 'active bg-primary' : '' }}">
+            <a href="/thuonghieu/index" class="nav-link text-white <?php echo e(strpos($_SERVER['REQUEST_URI'], 'thuonghieu') !== false ? 'active bg-primary' : ''); ?>">
                 <i class="fas fa-tags me-2" style="width: 20px;"></i>
                 Thương hiệu
             </a>
         </li>
         <li>
-            <a href="/admin/donhang" class="nav-link text-white {{ strpos($_SERVER['REQUEST_URI'], 'donhang') !== false ? 'active bg-primary' : '' }}">
+            <a href="/admin/donhang" class="nav-link text-white <?php echo e(strpos($_SERVER['REQUEST_URI'], 'donhang') !== false ? 'active bg-primary' : ''); ?>">
                 <i class="fas fa-shopping-cart me-2" style="width: 20px;"></i>
                 Đơn hàng
             </a>
         </li>
         <li>
-            <a href="/users/index" class="nav-link text-white {{ strpos($_SERVER['REQUEST_URI'], 'users') !== false ? 'active bg-primary' : '' }}">
+            <a href="/users/index" class="nav-link text-white <?php echo e(strpos($_SERVER['REQUEST_URI'], 'users') !== false ? 'active bg-primary' : ''); ?>">
                 <i class="fas fa-users me-2" style="width: 20px;"></i>
                 Người dùng
             </a>
         </li>
         <li>
-            <a href="/magiamgia/index" class="nav-link text-white {{ strpos($_SERVER['REQUEST_URI'], 'magiamgia') !== false ? 'active bg-primary' : '' }}">
+            <a href="/magiamgia/index" class="nav-link text-white <?php echo e(strpos($_SERVER['REQUEST_URI'], 'magiamgia') !== false ? 'active bg-primary' : ''); ?>">
                 <i class="fas fa-percentage me-2" style="width: 20px;"></i>
                 Mã giảm giá
             </a>
         </li>
           <li>
-            <a href="/contacts/index" class="nav-link text-white {{ strpos($_SERVER['REQUEST_URI'], 'contacts') !== false ? 'active bg-primary' : '' }}">
+            <a href="/contacts/index" class="nav-link text-white <?php echo e(strpos($_SERVER['REQUEST_URI'], 'contacts') !== false ? 'active bg-primary' : ''); ?>">
                 <i class="fas fa-envelope me-2" style="width: 20px;"></i>
                 Liên hệ
             </a>
@@ -64,7 +64,7 @@
             <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center me-2" style="width: 32px; height: 32px;">
                 <i class="fas fa-user"></i>
             </div>
-            <strong>{{ $_SESSION['login']['ten'] ?? 'Admin' }}</strong>
+            <strong><?php echo e($_SESSION['login']['ten'] ?? 'Admin'); ?></strong>
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
             <li><a class="dropdown-item" href="#">Cài đặt</a></li>
@@ -73,4 +73,4 @@
             <li><a class="dropdown-item" href="/auth/logout">Đăng xuất</a></li>
         </ul>
     </div>
-</div>
+</div><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/layout/admin_sidebar.blade.php ENDPATH**/ ?>

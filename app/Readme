@@ -1,2 +1,11 @@
 chay code : php -S localhost:8000 -t app/public
 composer require phpmailer/phpmailer
+
+
+
+ git rm --cached app/.env
+ app/.env
+git add .gitignore
+git commit --amend -m "Remove .env file and update gitignore"
+Remove .env file and update gitignore
+PS C:\xampp\htdocs\all_php\php11> git push origin master

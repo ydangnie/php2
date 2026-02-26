@@ -1,167 +1,156 @@
-<?php
-class CheckoutController extends Controller {
-    private $orderModel;
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh Toán - MyShop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/public/css/nav.css">
+</head>
+<body class="bg-light">
+    <?php echo $__env->make('layout.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-    public function __construct() {
-        $this->orderModel = $this->model('OrderModel');
-    }
-
-    // 1. Hiển thị form checkout
-    public function index() {
-        if (session_status() == PHP_SESSION_NONE) session_start();
-        if (empty($_SESSION['cart'])) {
-            $_SESSION['error'] = "Giỏ hàng trống, không thể thanh toán!";
-            header("Location: /cart"); exit();
-        }
-
-        // Tính tiền
-        $total = 0;
-        foreach ($_SESSION['cart'] as $item) $total += $item['price'] * $item['quantity'];
-        $discount = isset($_SESSION['coupon']) ? ($_SESSION['coupon']['loai'] == 'fixed' ? $_SESSION['coupon']['gia_tri'] : $total * ($_SESSION['coupon']['gia_tri'] / 100)) : 0;
-        $final_total = $total - $discount;
-
-        $this->view('view.checkout', [
-            'cart' => $_SESSION['cart'],
-            'total' => $total,
-            'discount' => $discount,
-            'final_total' => $final_total
-        ]);
-    }
-
-    // 2. Xử lý lưu đơn
-    public function process() {
-        if (session_status() == PHP_SESSION_NONE) session_start();
-        if (empty($_SESSION['cart'])) header("Location: /cart");
-
-        // Tính lại tiền an toàn ở backend
-        $total = 0;
-        foreach ($_SESSION['cart'] as $item) $total += $item['price'] * $item['quantity'];
-        $discount = isset($_SESSION['coupon']) ? ($_SESSION['coupon']['loai'] == 'fixed' ? $_SESSION['coupon']['gia_tri'] : $total * ($_SESSION['coupon']['gia_tri'] / 100)) : 0;
-        $final_total = $total - $discount;
-
-        $phuong_thuc = $_POST['payment_method'] ?? 'cod';
+    <main class="container py-5">
+        <h2 class="fw-bold text-uppercase mb-4">Thanh Toán Đơn Hàng</h2>
         
-        $data = [
-            'user_id' => $_SESSION['user']['id'] ?? null,
-            'ten_nguoi_nhan' => trim($_POST['fullname']),
-            'sdt' => trim($_POST['phone']),
-            'dia_chi' => trim($_POST['address']),
-            'ghi_chu' => trim($_POST['note']),
-            'tong_tien' => $final_total,
-            'phuong_thuc_tt' => $phuong_thuc,
-            'trang_thai_tt' => 'chua_thanh_toan'
-        ];
+        <form action="/checkout/process" method="POST">
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="card border-dark rounded-0 shadow-sm">
+                        <div class="card-header bg-dark text-white rounded-0 text-uppercase fw-bold py-3">
+                            Thông tin giao hàng
+                        </div>
+                        <div class="card-body p-4">
+                            
+                            <div class="mb-4 bg-light border border-dark p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label class="fw-bold small text-uppercase mb-0">Chọn sổ địa chỉ <span class="text-danger">*</span></label>
+                                    
+                                    <button type="button" class="btn btn-sm btn-dark rounded-0 fw-bold" data-bs-toggle="modal" data-bs-target="#modalAddAddress">
+                                        <i class="fas fa-plus"></i> Thêm địa chỉ mới
+                                    </button>
+                                </div>
+                                
+                                <select name="address_id" class="form-select rounded-0 border-dark shadow-none" required>
+                                    <option value="">-- Bấm để chọn địa chỉ giao hàng --</option>
+                                    <?php if(isset($addresses) && count($addresses) > 0): ?>
+                                        <?php $__currentLoopData = $addresses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $addr): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($addr['id']); ?>" <?php echo e($addr['is_default'] ? 'selected' : ''); ?>>
+                                                <?php echo e($addr['ten_nguoi_nhan']); ?> - <?php echo e($addr['sdt']); ?> | <?php echo e($addr['dia_chi']); ?>
 
-        // Lưu DB
-        $donhang_id = $this->orderModel->taoDonHang($data, $_SESSION['cart']);
+                                            </option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php endif; ?>
+                                </select>
+                                
+                                <?php if(empty($addresses)): ?>
+                                    <small class="text-danger mt-2 d-block fw-bold"><i class="fas fa-exclamation-triangle"></i> Bạn chưa có địa chỉ nào. Vui lòng bấm "Thêm địa chỉ mới" để tiếp tục!</small>
+                                <?php endif; ?>
+                            </div>
+                            <div class="mb-3">
+                                <label class="fw-bold small text-uppercase">Ghi chú cho đơn vị vận chuyển</label>
+                                <textarea name="note" class="form-control rounded-0 border-dark shadow-none" rows="3" placeholder="Ví dụ: Giao hàng vào giờ hành chính, gọi trước khi giao..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        if ($phuong_thuc == 'vnpay') {
-            // GỌI HÀM VNPAY
-            $this->thanhToanVNPay($donhang_id, $final_total);
-        } else {
-            // Thanh toán COD (Tiền mặt)
-            unset($_SESSION['cart']);
-            unset($_SESSION['coupon']);
-            $_SESSION['success'] = "Đặt hàng thành công! Mã đơn của bạn là #DH" . $donhang_id;
-            header("Location: /cart"); // Tạm thời redirect về giỏ hàng
-        }
-    }
+                <div class="col-lg-5">
+                    <div class="card border-dark rounded-0 shadow-sm">
+                        <div class="card-header bg-white border-bottom border-dark rounded-0 text-uppercase fw-bold py-3">
+                            Đơn hàng của bạn
+                        </div>
+                        <div class="card-body p-4 bg-white">
+                            <ul class="list-group list-group-flush mb-3">
+                                <?php $__currentLoopData = $cart; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li class="list-group-item d-flex justify-content-between lh-sm px-0">
+                                    <div>
+                                        <h6 class="my-0 fw-bold"><?php echo e($item['name']); ?></h6>
+                                        <small class="text-muted">Size: <?php echo e($item['size']); ?> | Màu: <?php echo e($item['color']); ?> x <?php echo e($item['quantity']); ?></small>
+                                    </div>
+                                    <span class="text-dark fw-bold"><?php echo e(number_format($item['price'] * $item['quantity'])); ?>đ</span>
+                                </li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </ul>
 
-    // 3. Xử lý link VNPay
-    private function thanhToanVNPay($donhang_id, $amount) {
-        $vnp_TmnCode = $_ENV['VNPAY_TMN_CODE'];
-        $vnp_HashSecret = $_ENV['VNPAY_HASH_SECRET'];
-        $vnp_Url = $_ENV['VNPAY_URL'];
-        $vnp_Returnurl = $_ENV['APP_URL'] . "/checkout/vnpayReturn";
+                            <div class="d-flex justify-content-between mb-2 small text-muted text-uppercase">
+                                <span>Tạm tính</span>
+                                <span><?php echo e(number_format($total)); ?>đ</span>
+                            </div>
+                            <?php if($discount > 0): ?>
+                            <div class="d-flex justify-content-between mb-2 small text-success text-uppercase">
+                                <span>Giảm giá</span>
+                                <span>-<?php echo e(number_format($discount)); ?>đ</span>
+                            </div>
+                            <?php endif; ?>
+                            <div class="d-flex justify-content-between mt-3 pt-3 border-top border-dark">
+                                <span class="h5 fw-bold text-uppercase">Tổng tiền</span>
+                                <span class="h4 fw-bold text-danger"><?php echo e(number_format($final_total)); ?>đ</span>
+                            </div>
 
-        $vnp_TxnRef = $donhang_id; // Mã đơn hàng
-        $vnp_OrderInfo = "Thanh toan don hang DH" . $donhang_id;
-        $vnp_OrderType = "billpayment";
-        $vnp_Amount = $amount * 100; // VNPAY yêu cầu nhân 100
-        $vnp_Locale = "vn";
-        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+                            <div class="mt-4 pt-3 border-top border-dark">
+                                <h6 class="fw-bold text-uppercase mb-3">Phương thức thanh toán</h6>
+                                
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input border-dark shadow-none" type="radio" name="payment_method" id="cod" value="cod" checked>
+                                    <label class="form-check-label fw-bold" for="cod">
+                                        <i class="fas fa-money-bill-wave text-success me-2"></i>Thanh toán khi nhận hàng (COD)
+                                    </label>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input border-dark shadow-none" type="radio" name="payment_method" id="vnpay" value="vnpay">
+                                    <label class="form-check-label fw-bold" for="vnpay">
+                                        <img src="https://vnpay.vn/s1/vnpay/assets/images/logo-icon/logo-primary.svg" height="20" class="me-2"> Thanh toán qua VNPAY
+                                    </label>
+                                </div>
 
-        $inputData = array(
-            "vnp_Version" => "2.1.0",
-            "vnp_TmnCode" => $vnp_TmnCode,
-            "vnp_Amount" => $vnp_Amount,
-            "vnp_Command" => "pay",
-            "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode" => "VND",
-            "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => $vnp_OrderInfo,
-            "vnp_OrderType" => $vnp_OrderType,
-            "vnp_ReturnUrl" => $vnp_Returnurl,
-            "vnp_TxnRef" => $vnp_TxnRef
-        );
+                                <button type="submit" class="btn btn-dark w-100 rounded-0 py-3 text-uppercase fw-bold fs-5 mt-2" <?php echo e(empty($addresses) ? 'disabled' : ''); ?>>
+                                    Hoàn tất đặt hàng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
 
-        ksort($inputData);
-        $query = "";
-        $i = 0;
-        $hashdata = "";
-        foreach ($inputData as $key => $value) {
-            if ($i == 1) {
-                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
-            } else {
-                $hashdata .= urlencode($key) . "=" . urlencode($value);
-                $i = 1;
-            }
-            $query .= urlencode($key) . "=" . urlencode($value) . '&';
-        }
+    <div class="modal fade" id="modalAddAddress" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-0 border-dark">
+                <div class="modal-header bg-dark text-white rounded-0">
+                    <h5 class="modal-title fw-bold text-uppercase">Thêm Địa Chỉ Mới</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="/profile/addAddress" method="POST">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="fw-bold small text-uppercase">Họ tên người nhận</label>
+                            <input type="text" name="ten_nguoi_nhan" class="form-control rounded-0 border-dark" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold small text-uppercase">Số điện thoại</label>
+                            <input type="text" name="sdt" class="form-control rounded-0 border-dark" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold small text-uppercase">Địa chỉ chi tiết (Số nhà, Phường, Quận)</label>
+                            <textarea name="dia_chi" class="form-control rounded-0 border-dark" rows="3" required></textarea>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input border-dark" type="checkbox" name="is_default" id="is_default" value="1" checked>
+                            <label class="form-check-label fw-bold" for="is_default">Đặt làm địa chỉ mặc định</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top border-dark">
+                        <button type="button" class="btn btn-outline-dark rounded-0" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-dark rounded-0 fw-bold px-4">Lưu Địa Chỉ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-        $vnp_Url = $vnp_Url . "?" . $query;
-        if (isset($vnp_HashSecret)) {
-            $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
-            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
-        }
-        
-        // Chuyển hướng sang VNPay
-        header('Location: ' . $vnp_Url);
-        die();
-    }
-
-    // 4. Callback từ VNPay trả về
-    public function vnpayReturn() {
-        if (session_status() == PHP_SESSION_NONE) session_start();
-        $vnp_SecureHash = $_GET['vnp_SecureHash'];
-        $inputData = array();
-        foreach ($_GET as $key => $value) {
-            if (substr($key, 0, 4) == "vnp_") {
-                $inputData[$key] = $value;
-            }
-        }
-        
-        unset($inputData['vnp_SecureHash']);
-        ksort($inputData);
-        $i = 0;
-        $hashData = "";
-        foreach ($inputData as $key => $value) {
-            if ($i == 1) {
-                $hashData = $hashData . '&' . urlencode($key) . "=" . urlencode($value);
-            } else {
-                $hashData = $hashData . urlencode($key) . "=" . urlencode($value);
-                $i = 1;
-            }
-        }
-
-        $secureHash = hash_hmac('sha512', $hashData, $_ENV['VNPAY_HASH_SECRET']);
-        $donhang_id = $_GET['vnp_TxnRef'];
-
-        if ($secureHash == $vnp_SecureHash) {
-            if ($_GET['vnp_ResponseCode'] == '00') {
-                // Thanh toán thành công
-                $this->orderModel->updateTrangThaiThanhToan($donhang_id, 'da_thanh_toan');
-                unset($_SESSION['cart']);
-                unset($_SESSION['coupon']);
-                $_SESSION['success'] = "Thanh toán VNPay thành công cho đơn hàng #DH" . $donhang_id;
-            } else {
-                $_SESSION['error'] = "Thanh toán VNPay bị hủy hoặc lỗi!";
-            }
-        } else {
-            $_SESSION['error'] = "Chữ ký không hợp lệ, dữ liệu có thể bị giả mạo!";
-        }
-        header("Location: /cart"); // Tạm thời trả về trang giỏ hàng để báo lỗi/thành công
-    }
-}
-?><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/view/checkout.blade.php ENDPATH**/ ?>
+    <?php echo $__env->make('layout.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html><?php /**PATH C:\xampp\htdocs\all_php\php11\app\views/view/checkout.blade.php ENDPATH**/ ?>

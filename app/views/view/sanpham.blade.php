@@ -22,9 +22,9 @@
               <div class="card sp-filter-box mb-4">
                 <div class="card-header sp-filter-header">Danh mục</div>
                 <div class="list-group list-group-flush rounded-0">
-                  <a href="/sanpham" class="list-group-item list-group-item-action sp-filter-item {{ empty($category_id) ? 'active' : '' }}">Tất cả</a>
+                  <a href="/view/sanpham" class="list-group-item list-group-item-action sp-filter-item {{ empty($category_id) ? 'active' : '' }}">Tất cả</a>
                   @foreach($danhmuc as $dm)
-                    <a href="/sanpham?category={{ $dm['id'] }}" class="list-group-item list-group-item-action sp-filter-item {{ (isset($category_id) && $category_id == $dm['id']) ? 'active' : '' }}">
+                    <a href="/view/sanpham?category={{ $dm['id'] }}" class="list-group-item list-group-item-action sp-filter-item {{ (isset($category_id) && $category_id == $dm['id']) ? 'active' : '' }}">
                         {{ $dm['tendanhmuc'] }}
                     </a>
                   @endforeach

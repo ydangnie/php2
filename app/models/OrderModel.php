@@ -43,5 +43,62 @@ class OrderModel extends Model {
         $stmt = $this->connect()->prepare($sql);
         return $stmt->execute(['tt' => $trang_thai, 'id' => $donhang_id]);
     }
+    // --- CÁC HÀM MỚI THÊM VÀO ---
+
+    // 1. Lấy tất cả đơn hàng (Dành cho Admin)
+    public function getAllOrders() {
+        $sql = "SELECT * FROM donhang ORDER BY created_at DESC";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // 2. Lấy đơn hàng theo ID User (Dành cho Khách hàng xem lịch sử)
+    public function getOrdersByUserId($user_id) {
+        $sql = "SELECT * FROM donhang WHERE user_id = :user_id ORDER BY created_at DESC";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute(['user_id' => $user_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // 3. Lấy thông tin 1 đơn hàng cụ thể
+    public function getOrderById($id) {
+        $sql = "SELECT * FROM donhang WHERE id = :id";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // 4. Lấy danh sách sản phẩm trong 1 đơn hàng (Chi tiết đơn hàng)
+    public function getOrderDetails($donhang_id) {
+        $sql = "SELECT c.*, p.name, p.img 
+                FROM chitiet_donhang c 
+                JOIN products p ON c.product_id = p.id 
+                WHERE c.donhang_id = :donhang_id";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute(['donhang_id' => $donhang_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // 5. Cập nhật trạng thái đơn hàng (Dành cho Admin)
+    public function updateTrangThaiDon($id, $trang_thai_don, $trang_thai_tt) {
+        $sql = "UPDATE donhang SET trang_thai_don = :tt_don, trang_thai_tt = :tt_tt WHERE id = :id";
+        $stmt = $this->connect()->prepare($sql);
+        return $stmt->execute([
+            'tt_don' => $trang_thai_don,
+            'tt_tt' => $trang_thai_tt,
+            'id' => $id
+        ]);
+    }
+    // Hủy đơn hàng bởi người dùng (Chỉ khi đang chờ xác nhận)
+    public function huyDonHangUser($donhang_id, $user_id) {
+        $sql = "UPDATE donhang SET trang_thai_don = 'da_huy' 
+                WHERE id = :id AND user_id = :user_id AND trang_thai_don = 'cho_xac_nhan'";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute(['id' => $donhang_id, 'user_id' => $user_id]);
+        
+        // Trả về true nếu có dòng được cập nhật thành công
+        return $stmt->rowCount() > 0; 
+    }
 }
 ?>
